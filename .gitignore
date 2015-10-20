@@ -1,5 +1,6 @@
 .gradle
-/local.properties
+/project/local.properties
 /project/.idea
 .DS_Store
-/build
+/project/build
+/my_thoughts
