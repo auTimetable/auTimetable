@@ -1,2 +1,2 @@
-# auTimetable
-This is an Androd application for Academic Uneversity.
+#auTimetable
+Приложение для просмотра расписания занятий в Санкт-Петербургском Академическом Университете
