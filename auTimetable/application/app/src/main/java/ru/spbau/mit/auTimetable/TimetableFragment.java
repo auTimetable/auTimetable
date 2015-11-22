@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -58,6 +55,8 @@ public class TimetableFragment extends Fragment {
         currentDayName.setText(date.dayName);
         currentDate.setText(date.day + "." + date.month + "." + date.year);
 
+        updateDayTimetable();
+
         return mWholeScreen;
     }
 
@@ -91,6 +90,7 @@ public class TimetableFragment extends Fragment {
                 date.previousDay();
                 currentDayName.setText(date.dayName);
                 currentDate.setText(date.day + "." + date.month + "." + date.year);
+                updateDayTimetable();
             }
         });
 
@@ -100,10 +100,34 @@ public class TimetableFragment extends Fragment {
                 date.nextDay();
                 currentDayName.setText(date.dayName);
                 currentDate.setText(date.day + "." + date.month + "." + date.year);
+                updateDayTimetable();
             }
         });
 
         wasSetUp = true;
+    }
+
+    private void updateDayTimetable() {
+        int parity = 0;
+
+        ClassInfo classes[] = new ClassInfo[] {
+                new ClassInfo("10-12", "Матан", "208", "Храбров"),
+                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
+                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
+                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
+                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
+                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
+                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов")
+        };
+
+        mDayTimetable.setAdapter(new TimetableAdapter(
+                getActionBar().getThemedContext(),
+                classes
+        ));
+    }
+
+    private ActionBar getActionBar() {
+        return ((ActionBarActivity) getActivity()).getSupportActionBar();
     }
 
     private class Date {
@@ -111,6 +135,7 @@ public class TimetableFragment extends Fragment {
         public int day;
         public int month;
         public int year;
+        public int dayOfWeek;
 
         private Calendar calendar;
 
@@ -141,7 +166,7 @@ public class TimetableFragment extends Fragment {
             day = calendar.get(Calendar.DAY_OF_MONTH);
             month = calendar.get(Calendar.MONTH);
             year = calendar.get(Calendar.YEAR);
-            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
             dayName = daysNames.get(dayOfWeek - 1);
         }
 
