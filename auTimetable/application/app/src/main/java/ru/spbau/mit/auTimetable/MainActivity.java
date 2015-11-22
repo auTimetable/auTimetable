@@ -135,13 +135,17 @@ public class MainActivity extends ActionBarActivity
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        public static Fragment newInstance(int sectionNumber) {
+            Fragment fragment;
+            if (sectionNumber != 1)
+                fragment = new PlaceholderFragment();
+            else
+                fragment = new TimetableFragment();
 
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
 
+            fragment.setArguments(args);
             return fragment;
         }
 
