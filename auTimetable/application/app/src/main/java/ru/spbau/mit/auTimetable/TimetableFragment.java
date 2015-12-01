@@ -1,11 +1,15 @@
 package ru.spbau.mit.auTimetable;
 
 import android.app.Activity;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,74 +114,21 @@ public class TimetableFragment extends Fragment {
     private void updateDayTimetable() {
         int parity = 0;
 
-        ClassInfo classes[] = new ClassInfo[] {
-                new ClassInfo("10-12", "Матан", "208", "Храбров"),
-                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
-                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
-                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
-                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
-                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов"),
-                new ClassInfo("12-14", "Алгебра", "206", "Всемирнов")
-        };
+        XMLParser parser = new XMLParser(getActivity().getAssets(), 0, 0);
+        WeekInfo weekInfo = parser.getWeek(parity);
+        DayInfo dayInfo = weekInfo.getDay(date.dayNameEn);
+
+        ClassInfo classes[] = new ClassInfo[dayInfo.classList.size()];
+        classes = dayInfo.classList.toArray(classes);
 
         mDayTimetable.setAdapter(new TimetableAdapter(
                 getActionBar().getThemedContext(),
-                classes
+                classes,
+                date
         ));
     }
 
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
-    }
-
-    private class Date {
-        public String dayName;
-        public int day;
-        public int month;
-        public int year;
-        public int dayOfWeek;
-
-        private Calendar calendar;
-
-        private final List<String> daysNames = Arrays.asList(
-                "Воскресенье",
-                "Понедельник",
-                "Вторник",
-                "Среда",
-                "Четверг",
-                "Пятница",
-                "Суббота"
-        );
-
-        public Date() {
-            update();
-        }
-
-        public void update() {
-            updateCalendar();
-            updateDate();
-        }
-
-        public void updateCalendar() {
-            calendar = Calendar.getInstance();
-        }
-
-        public void updateDate() {
-            day = calendar.get(Calendar.DAY_OF_MONTH);
-            month = calendar.get(Calendar.MONTH);
-            year = calendar.get(Calendar.YEAR);
-            dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-            dayName = daysNames.get(dayOfWeek - 1);
-        }
-
-        public void previousDay() {
-            calendar.add(Calendar.DATE, -1);
-            updateDate();
-        }
-
-        public void nextDay() {
-            calendar.add(Calendar.DATE, 1);
-            updateDate();
-        }
     }
 }

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<timetable group="202" subgroup="2">
+    <week parity="0">
+        <day name="monday">
+            <class start="10:00" end="11:30">
+                <subject>Матлогика</subject>
+                <type>Лекция</type>
+                <classroom>206</classroom>
+                <teacher>Ицыксон Д.М.</teacher>
+            </class>
+            <class start="12:00" end="13:30">
+                <subject>Матлогика</subject>
+                <type>Практика</type>
+                <classroom>522</classroom>
+                <teacher>Кноп А.А.</teacher>
+            </class>
+            <class start="14:00" end="15:30">
+                <subject>Функциональное программирование</subject>
+                <type>Лекция</type>
+                <classroom>206</classroom>
+                <teacher>Москвин Д.Н.</teacher>
+            </class>
+            <class start="16:00" end="17:30">
+                <subject>Функциональное программирование</subject>
+                <type>Практика</type>
+                <classroom>522</classroom>
+                <teacher>Исаев В.А.</teacher>
+            </class>
+        </day>
+        <day name="tuesday">
+
+        </day>
+        <day name="wednesday">
+
+        </day>
+        <day name="thursday">
+
+        </day>
+        <day name="friday">
+
+        </day>
+        <day name="saturday">
+
+        </day>
+        <day name="sunday">
+
+        </day>
+    </week>
+</timetable>

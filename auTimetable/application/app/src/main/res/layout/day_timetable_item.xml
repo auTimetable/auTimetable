@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/item_cover"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="100dp"
-              android:background="@color/light_blue">
+              android:layout_height="120dp"
+              android:background="@color/blue">
 
     <TextView
             android:id="@+id/class_time_interval"

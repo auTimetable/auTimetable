@@ -7,8 +7,15 @@
     <TextView
             android:id="@+id/class_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="class name"/>
+            android:layout_height="wrap_content"/>
+    <View
+            android:background="@color/light_grey"
+            android:layout_width = "fill_parent"
+            android:layout_height="1dip"/>
+    <TextView
+            android:id="@+id/class_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     <View
             android:background="@color/light_grey"
             android:layout_width = "fill_parent"
@@ -16,8 +23,7 @@
     <TextView
             android:id="@+id/classroom"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="where and when"/>
+            android:layout_height="wrap_content"/>
     <View
             android:background="@color/light_grey"
             android:layout_width = "fill_parent"
@@ -25,7 +31,6 @@
     <TextView
             android:id="@+id/teacher_name"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="teacher name"/>
+            android:layout_height="wrap_content"/>
 
 </LinearLayout>

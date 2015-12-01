@@ -6,14 +6,17 @@ package ru.spbau.mit.auTimetable;
  * @author Kravchenko Dima
  */
 public class ClassInfo {
-    public String time;
-    public String className;
+    public TimeInterval time;
+    public String subject;
+    public String classType;
     public String classroom;
     public String teacherName;
 
-    public ClassInfo(String time, String className, String classroom, String teacherName) {
+    public ClassInfo(TimeInterval time, String subject, String classType,
+                     String classroom, String teacherName) {
         this.time        = time;
-        this.className   = className;
+        this.subject   = subject;
+        this.classType   = classType;
         this.classroom   = classroom;
         this.teacherName = teacherName;
     }
