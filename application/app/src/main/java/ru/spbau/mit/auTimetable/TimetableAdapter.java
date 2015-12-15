@@ -10,11 +10,7 @@ import android.widget.*;
 
 import java.util.Calendar;
 
-/**
- * Created by equi on 22.11.15.
- *
- * @author Kravchenko Dima
- */
+
 public class TimetableAdapter extends ArrayAdapter<ClassInfo> {
     private final Context context;
     private final ClassInfo[] values;

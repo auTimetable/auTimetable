@@ -12,18 +12,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 
 
-/**
- * Created by equi on 15.11.15.
- *
- * @author Kravchenko Dima
- */
 public class TimetableFragment extends Fragment {
-    private View mDayInformation;
     private ListView mDayTimetable;
     private LinearLayout mWholeScreen;
-    private Button leftButton;
-    private Button rightButton;
-
     private TextView currentDayName;
     private TextView currentDate;
 
@@ -31,8 +22,7 @@ public class TimetableFragment extends Fragment {
 
     private boolean wasSetUp = false;
 
-    private int groupNumber = 0;
-    private int subgroupNumber = 0;
+    private XMLParser parser = null;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -52,8 +42,11 @@ public class TimetableFragment extends Fragment {
         setUp(inflater, container);
 
         Bundle args = getArguments();
-        groupNumber = args.getInt("group_number", 0);
-        subgroupNumber = args.getInt("subgroup_number", 0);
+        int groupNumber = args.getInt("group_number", 0);
+        int subgroupNumber = args.getInt("subgroup_number", 0);
+
+        parser = XMLParser.Builder.build(getActionBar().getThemedContext(),
+                getActivity(), groupNumber, subgroupNumber);
 
         date.update();
         currentDayName.setText(date.dayName);
@@ -79,14 +72,14 @@ public class TimetableFragment extends Fragment {
         mWholeScreen = (LinearLayout) inflater.inflate(
                 R.layout.fragment_timetable, container, false);
 
-        mDayInformation = mWholeScreen.findViewById(R.id.day_information);
+        View mDayInformation = mWholeScreen.findViewById(R.id.day_information);
         mDayTimetable = (ListView) mWholeScreen.findViewById(R.id.day_timetable);
 
         currentDayName = (TextView) mDayInformation.findViewById(R.id.day);
         currentDate = (TextView) mDayInformation.findViewById(R.id.date);
 
-        leftButton = (Button) mWholeScreen.findViewById(R.id.left_button);
-        rightButton = (Button) mWholeScreen.findViewById(R.id.right_button);
+        Button leftButton = (Button) mWholeScreen.findViewById(R.id.left_button);
+        Button rightButton = (Button) mWholeScreen.findViewById(R.id.right_button);
 
         leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +107,6 @@ public class TimetableFragment extends Fragment {
     private void updateDayTimetable() {
         int parity = 0;
 
-        XMLParser parser = new XMLParser(getActivity().getAssets(), groupNumber, subgroupNumber);
         WeekInfo weekInfo = parser.getWeek(parity);
         DayInfo dayInfo = weekInfo.getDay(date.dayNameEn);
 

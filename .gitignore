@@ -1,6 +1,8 @@
-/auTimetable/application/.gradle
-/auTimetable/application/local.properties
-/auTimetable/application/.idea
+/application/.gradle
+/application/local.properties
+/application/.idea
+/application/local.properties
+/application/build
+/application/app/build
 .DS_Store
-/auTimetable/application/build
 /my_thoughts

@@ -1,39 +1,39 @@
 package ru.spbau.mit.auTimetable;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Hashtable;
 import java.util.Map;
 
-/**
- * Created by equi on 23.11.15.
- *
- * @author Kravchenko Dima
- */
+
 public class XMLParser {
-    private Document doc;
+    private Document doc = null;
 
     private int group;
     private int subgroup;
 
-    public XMLParser(AssetManager mgr, int group, int subgroup) {
+    private XMLParser() {
+        //this one only used if some errors with creating a file occurred.
+    }
+
+    private XMLParser(File file, int group, int subgroup) {
         this.group = group;
         this.subgroup = subgroup;
 
-        String fileName = group + "_" + subgroup + ".xml";
-
         //TODO we may need to load this file from server first
         try {
-            InputStream inputStream = mgr.open(fileName);
+            FileInputStream fis = new FileInputStream(file);
             DocumentBuilderFactory dbFactory
                     = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            doc = dBuilder.parse(inputStream);
+            doc = dBuilder.parse(fis);
             doc.getDocumentElement().normalize();
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,5 +124,30 @@ public class XMLParser {
         int endM   = Integer.parseInt(endTimeParts[1]);
 
         return new TimeInterval(startH, startM, endH, endM);
+    }
+
+    public static class Builder {
+        public static XMLParser build(Context context, Activity activity, int group, int subgroup) {
+            String fileName = Integer.toString(group) + "_" + Integer.toString(subgroup) + ".xml";
+            File file = new File(context.getCacheDir(), fileName);
+
+            if (file.exists()) {
+                return new XMLParser(file, group, subgroup);
+            } else {
+                try {
+                    file = File.createTempFile(fileName, null, context.getCacheDir());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return new XMLParser();//this XMLParse is empty
+                }
+                Downloader downloader = new Downloader(group, subgroup, file, activity);
+                if (downloader.run()) {
+                    return new XMLParser(file, group, subgroup);
+                } else {
+                    //for some reason (network is unavailable or server is down) we could not download file
+                    return new XMLParser();
+                }
+            }
+        }
     }
 }

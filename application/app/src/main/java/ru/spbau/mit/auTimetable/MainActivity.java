@@ -19,12 +19,12 @@ public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 
+    private static int groupNumber = 0;
+    private static int subgroupNumber = 0;
+
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     private CharSequence mTitle;
-
-    private static int groupNumber = 0;
-    private static int subgroupNumber = 0;
 
     private int currentSection = 0;
 
@@ -154,6 +154,7 @@ public class MainActivity extends ActionBarActivity
                 fragment = new TimetableFragment();
             }
 
+            System.out.println("new timetable fragment created");
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             args.putInt("group_number", groupNumber);
