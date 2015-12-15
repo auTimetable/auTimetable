@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="action_bar_color" type="color">#80DAEB</item>
+    <item name="white" type="color">#FFFFFF</item>
+    <item name="light_grey" type="color">#D3D3D3</item>
+
+    <item name="blue" type="color">#33EEDD</item>
+    <item name="green" type="color">#99FF99</item>
+    <item name="yellow" type="color">#FFFF88</item>
+    <item name="red" type="color">#FF9999</item>
+
+    <item name="deep_blue" type="color">#33AAEE</item>
+</resources>
