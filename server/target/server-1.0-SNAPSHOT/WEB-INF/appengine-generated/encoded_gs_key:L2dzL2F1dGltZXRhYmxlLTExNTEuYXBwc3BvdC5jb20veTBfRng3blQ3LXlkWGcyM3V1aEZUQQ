@@ -1,0 +1,66 @@
+module Eval
+    ( Eval, runEval
+    , Error, Store
+    , update, getVar
+    ) where
+
+import qualified Data.Map as M
+import Data.List
+import Control.Monad
+
+-- to delete
+import Control.Applicative
+
+import Expr
+
+type Error = String
+type Store = M.Map String Value
+
+-- Монада Eval предназначена для вычисления выражений.
+-- В ней инкапсулирована вся необходимая информация и побочные эффекты.
+
+newtype Eval a = Eval { runEval :: Store -> (Maybe a, [Error], Store) }
+
+-- Этот instance объединяет сразу несколько instance для лругих монад
+-- Во-первых, State Store
+-- Во-вторых, Writer [Error]
+-- В-третьих, Maybe
+-- Так что можете сверится с тем как определены эти монады.
+instance Monad Eval where
+    return x = Eval $ \st -> (Just x, [], st) 
+    Eval m >>= k = Eval $ \st -> case m st of (Nothing, es, st') -> (Nothing, es, st')
+                                              (Just x, es, st')  -> let (res, es', st'') = runEval (k x) st'
+                                                                    in (res, es ++ es', st'')
+
+    -- не знаю как еще можно кидать эту ошибку
+    fail _ = Eval $ \st -> (Nothing, ["type error"], st)
+
+-- MonadPlus - аналог Alternative для монад
+-- mzero - вычисление, которое ничего не делает, сразу завершается неуспехом
+-- mplus m1 m2 пытается выполнить m1, если тот завершился неуспехом, выполняет m2
+instance MonadPlus Eval where
+    mzero = Eval $ \st -> (Nothing, [], st)
+    mplus (Eval l) (Eval r) = Eval $ \st -> case l st of (Just r, es, st') -> (Just r, es, st')
+                                                         otherwise         -> r st
+
+-- update k v обновляет хранилище, записывая по ключу k значение v.
+update :: String -> Value -> Eval ()
+update k v = Eval $ \st -> (Just (), [], M.insert k v st)
+
+-- gatVar v достает из хранилища значение по ключу k.
+-- Если такого ключа нет, то ошибка сохраняется внутри монады.
+getVar :: String -> Eval Value
+getVar k = Eval $ \st -> case M.lookup k st of Nothing -> (Nothing, ["Undefined variable: " ++ k], st)
+                                               Just v  -> (Just v, [], st)
+
+{- Doesn't work without it -}
+instance Functor Eval where
+    fmap = liftM 
+
+instance Applicative Eval where
+    pure = return
+    (<*>) = ap
+
+instance Alternative Eval where
+    empty = mzero
+    (<|>) = mplus  

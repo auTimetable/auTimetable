@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<timetable group="0" subgroup="0">
+    <week parity="0">
+        <day name="monday">
+            <class start="10:00" end="11:30">
+                <subject>Матлогика</subject>
+                <type>Лекция</type>
+                <classroom>206</classroom>
+                <teacher>Ицыксон Д.М.</teacher>
+            </class>
+            <class start="12:00" end="13:30">
+                <subject>Матлогика</subject>
+                <type>Практика</type>
+                <classroom>522</classroom>
+                <teacher>Кноп А.А.</teacher>
+            </class>
+            <class start="14:00" end="15:30">
+                <subject>Функциональное программирование</subject>
+                <type>Лекция</type>
+                <classroom>206</classroom>
+                <teacher>Москвин Д.Н.</teacher>
+            </class>
+            <class start="16:00" end="17:30">
+                <subject>Функциональное программирование</subject>
+                <type>Практика</type>
+                <classroom>522</classroom>
+                <teacher>Исаев В.А.</teacher>
+            </class>
+        </day>
+        <day name="tuesday">
+            <class start="10:00" end="11:30">
+                <subject>Архитектура</subject>
+                <type>Практика</type>
+                <classroom>305</classroom>
+                <teacher>Кринкин М.</teacher>
+            </class>
+            <class start="12:00" end="13:30">
+                <subject>Архитектура</subject>
+                <type>Лекция</type>
+                <classroom>305</classroom>
+                <teacher>Кринкин К.</teacher>
+            </class>
+            <class start="14:00" end="15:30">
+                <subject>Физкультура</subject>
+                <type>физ-ра</type>
+                <classroom>где-то</classroom>
+                <teacher>кто-то</teacher>
+            </class>
+            <class start="16:00" end="17:30">
+                <subject>Английский</subject>
+                <type>Лекция-практика</type>
+                <classroom>где-то</classroom>
+                <teacher>кто-то</teacher>
+            </class>
+        </day>
+        <day name="wednesday">
+            <class start="10:00" end="11:30">
+                <subject>Алгебра</subject>
+                <type>Практика</type>
+                <classroom>430</classroom>
+                <teacher>Антипов М.А.</teacher>
+            </class>
+            <class start="12:00" end="13:30">
+                <subject>Алгебра</subject>
+                <type>Лекция</type>
+                <classroom>208</classroom>
+                <teacher>Всемирнов М.А.</teacher>
+            </class>
+            <class start="14:00" end="15:30">
+                <subject>Алгебра</subject>
+                <type>Лекция</type>
+                <classroom>208</classroom>
+                <teacher>Всемирнов М.А.</teacher>
+            </class>
+            <class start="16:00" end="17:30">
+                <subject>Java</subject>
+                <type>Практика</type>
+                <classroom>430</classroom>
+                <teacher>Обедин H.</teacher>
+            </class>
+        </day>
+        <day name="thursday">
+            <class start="10:00" end="11:30">
+                <subject>Физкультура</subject>
+                <type>физ-ра</type>
+                <classroom>где-то</classroom>
+                <teacher>кто-то</teacher>
+            </class>
+            <class start="12:00" end="13:30">
+                <subject>Матан</subject>
+                <type>Практика</type>
+                <classroom>432</classroom>
+                <teacher>Алпеев А.</teacher>
+            </class>
+            <class start="14:00" end="15:30">
+                <subject>Матан</subject>
+                <type>Практика</type>
+                <classroom>432</classroom>
+                <teacher>Алпеев А.</teacher>
+            </class>
+            <class start="16:00" end="17:30">
+                <subject>Матан</subject>
+                <type>Лекция</type>
+                <classroom>208</classroom>
+                <teacher>Храбров</teacher>
+            </class>
+        </day>
+        <day name="friday">
+            <class start="10:00" end="11:30">
+                <subject>Java</subject>
+                <type>Лекция</type>
+                <classroom>206</classroom>
+                <teacher>Кузнецов А.М.</teacher>
+            </class>
+            <class start="12:00" end="13:30">
+                <subject>Дискретная математика</subject>
+                <type>Лекция</type>
+                <classroom>206</classroom>
+                <teacher>Омельченко А.В.</teacher>
+            </class>
+            <class start="14:00" end="15:30">
+                <subject>Дискретная математика</subject>
+                <type>Практика</type>
+                <classroom>434</classroom>
+                <teacher>Омельченко А.В.</teacher>
+            </class>
+            <class start="16:00" end="17:30">
+                <subject>Английский</subject>
+                <type>Лекция-практика</type>
+                <classroom>где-то</classroom>
+                <teacher>кто-то</teacher>
+            </class>
+        </day>
+        <day name="saturday">
+
+        </day>
+        <day name="sunday">
+
+        </day>
+    </week>
+</timetable>

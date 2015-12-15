@@ -1,0 +1,5 @@
+ru/spbau/auTimetable/server/OfyHelper.class
+ru/spbau/auTimetable/server/ServeServlet.class
+ru/spbau/auTimetable/server/UploadServlet.class
+ru/spbau/auTimetable/server/TimetableServlet.class
+ru/spbau/auTimetable/server/UploadedFile.class

@@ -4,5 +4,7 @@
 /application/local.properties
 /application/build
 /application/app/build
+/server/.idea
+/server/.DS_Store
 .DS_Store
 /my_thoughts
