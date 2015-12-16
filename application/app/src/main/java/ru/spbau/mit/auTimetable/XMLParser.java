@@ -2,7 +2,6 @@ package ru.spbau.mit.auTimetable;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.widget.Toast;
 import org.w3c.dom.*;
 
@@ -18,16 +17,13 @@ public class XMLParser {
 
     private int group;
     private int subgroup;
-    private final Activity activity;
 
-    private XMLParser(Activity activity) {
-        this.activity = activity;
+    private XMLParser() {
     }
 
-    private XMLParser(File file, Activity activity, int group, int subgroup) {
+    private XMLParser(File file, int group, int subgroup) {
         this.group = group;
         this.subgroup = subgroup;
-        this.activity = activity;
 
         try {
             FileInputStream fis = new FileInputStream(file);
@@ -37,28 +33,52 @@ public class XMLParser {
             doc = dBuilder.parse(fis);
             doc.getDocumentElement().normalize();
         } catch (Exception e) {
-            //showError("Could not parse timetable", activity);
             e.printStackTrace();
         }
     }
 
-    public WeekInfo getWeek(int parity) {
+    public WeekInfo getWeek(Date currentDay) {
         if (doc == null) {
-            //showError("No timetable found", activity);
-            return new WeekInfo(group, subgroup, parity);
+            return new WeekInfo(group, subgroup, 0);
         }
 
-        NodeList weeks = doc.getElementsByTagName("week");
+        try {
+            Node table = doc.getElementsByTagName("timetable").item(0);
+            String stringFirstDay = ((Element)table).getAttribute("first_day");
 
-        for (int i = 0; i < weeks.getLength(); i++) {
-            Node curWeek = weeks.item(i);
-            Element weekElement = (Element) curWeek;
-            if (weekElement.getAttribute("parity").equals(Integer.toString(parity))) {
-                return parseWeek(weekElement, parity);
+            int parity = 0;
+            try {
+                String dayParts[] = stringFirstDay.split("\\.");
+
+                int firstDayDay = Integer.parseInt(dayParts[0]);
+                int firstDayMonth = Integer.parseInt(dayParts[1]);
+                int firstDayYear = Integer.parseInt(dayParts[2]);
+
+                Date firstDay = new Date(firstDayYear, firstDayMonth - 1, firstDayDay);
+
+                if (currentDay.compare(firstDay) < 0) {
+                    return new WeekInfo(group, subgroup, 0);
+                }
+
+                parity = firstDay.howManyWeeksPassed(currentDay) % 2;
+            } catch (Exception e) {
+                //parity is set to 0 if no first day specified
             }
+
+            NodeList weeks = doc.getElementsByTagName("week");
+
+            for (int i = 0; i < weeks.getLength(); i++) {
+                Node curWeek = weeks.item(i);
+                Element weekElement = (Element) curWeek;
+                if (weekElement.getAttribute("parity").equals(Integer.toString(parity))) {
+                    return parseWeek(weekElement, parity);
+                }
+            }
+        } catch (Exception e) {
+            return new WeekInfo(group, subgroup, 0);
         }
 
-        return null;
+        return new WeekInfo(group, subgroup, 0);
     }
 
     private WeekInfo parseWeek(Element week, int parity) {
@@ -117,7 +137,7 @@ public class XMLParser {
         );
     }
 
-    private TimeInterval parseTimeInterval(String start, String end) {
+    private TimeInterval parseTimeInterval(String start, String end) throws NumberFormatException {
         String startTimeParts[] = start.split(":");
         String endTimeParts[] = end.split(":");
 
@@ -130,12 +150,12 @@ public class XMLParser {
     }
 
     public static class Builder {
-        public static XMLParser build(Activity activity, Context context, int group, int subgroup) {
+        public static XMLParser build(Activity activity, int group, int subgroup) {
             String fileName = Integer.toString(group) + "_" + Integer.toString(subgroup) + ".xml";
-            File file = new File(context.getCacheDir(), fileName);
+            File file = new File(activity.getCacheDir(), fileName);
 
             if (file.exists()) {
-                return new XMLParser(file, activity, group, subgroup);
+                return new XMLParser(file, group, subgroup);
             } else {
                 Downloader downloader = new Downloader(group, subgroup, activity);
                 Downloader.ResultContainer timetable = downloader.download();
@@ -152,12 +172,12 @@ public class XMLParser {
                         e.printStackTrace();
                         showError("Could not create file in cache.", activity);
 
-                        return new XMLParser(activity);
+                        return new XMLParser();
                     }
-                    return new XMLParser(file, activity, group, subgroup);
+                    return new XMLParser(file, group, subgroup);
                 } else {
                     showError(timetable.error, activity);
-                    return new XMLParser(activity);
+                    return new XMLParser();
                 }
             }
         }

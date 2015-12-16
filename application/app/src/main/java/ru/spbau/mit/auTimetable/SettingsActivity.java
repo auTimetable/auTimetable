@@ -13,11 +13,26 @@ import android.widget.EditText;
  * @author Kravchenko Dima
  */
 public class SettingsActivity extends ActionBarActivity {
+    private int groupNumber;
+    private int subgroupNumber;
+
+    private EditText groupNumberEditText;
+    private EditText subgroupNumberEditText;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        groupNumber = getIntent().getIntExtra("group_number", 0);
+        subgroupNumber = getIntent().getIntExtra("subgroup_number", 0);
+
         setContentView(R.layout.activity_settings);
+
+        groupNumberEditText = (EditText) findViewById(R.id.group_number);
+        subgroupNumberEditText = (EditText) findViewById(R.id.subgroup_number);
+
+        groupNumberEditText.setText(Integer.toString(groupNumber));
+        subgroupNumberEditText.setText(Integer.toString(subgroupNumber));
 
         Button doneButton = (Button) findViewById(R.id.done_button);
         doneButton.setOnClickListener(new View.OnClickListener() {
@@ -30,12 +45,6 @@ public class SettingsActivity extends ActionBarActivity {
 
     private void sendAndFinish(View v) {
         Intent returnIntent = new Intent(getBaseContext(), MainActivity.class);
-
-        EditText groupNumberEditText = (EditText) findViewById(R.id.group_number);
-        EditText subgroupNumberEditText = (EditText) findViewById(R.id.subgroup_number);
-
-        int groupNumber;
-        int subgroupNumber;
 
         try {
             groupNumber = Integer.parseInt(groupNumberEditText.getText().toString());

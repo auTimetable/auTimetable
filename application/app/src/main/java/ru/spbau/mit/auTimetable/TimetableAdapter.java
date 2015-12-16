@@ -71,9 +71,9 @@ public class TimetableAdapter extends ArrayAdapter<ClassInfo> {
             }
         } else {
             if (nowDate.compare(dateToShow) == -1) {
-                item_cover.setBackgroundColor(res.getColor(R.color.green));
-            } else {
                 item_cover.setBackgroundColor(res.getColor(R.color.blue));
+            } else {
+                item_cover.setBackgroundColor(res.getColor(R.color.green));
             }
         }
 

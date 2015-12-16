@@ -42,8 +42,4 @@ public class WeekInfo {
     public DayInfo getDay(String dayName) {
         return dayList.get(dayNames.indexOf(dayName));
     }
-
-    public ArrayList<DayInfo> getDayList() {
-        return dayList;
-    }
 }

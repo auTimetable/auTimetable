@@ -2,6 +2,7 @@ package ru.spbau.mit.auTimetable;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
 
     private static int groupNumber = 0;
     private static int subgroupNumber = 0;
@@ -40,7 +40,8 @@ public class MainActivity extends AppCompatActivity
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                (DrawerLayout) findViewById(R.id.drawer_layout)
+        );
     }
 
     private boolean mReturningWithResult = false;
@@ -131,11 +132,34 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putInt("group_number", groupNumber);
+        savedInstanceState.putInt("subgroup_number", subgroupNumber);
+    }
+
+    @Override
+    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        groupNumber = savedInstanceState.getInt("group_number");
+        subgroupNumber = savedInstanceState.getInt("subgroup_number");
+    }
+
+        @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
+            Bundle extras = new Bundle();
+
+            extras.putInt("group_number", groupNumber);
+            extras.putInt("subgroup_number", subgroupNumber);
+
+            intent.putExtras(extras);
+
             startActivityForResult(intent, 0);
             return true;
         }

@@ -120,9 +120,7 @@ public class TimetableFragment extends Fragment {
     }
 
     private void updateDayTimetable() {
-        int parity = 0;
-
-        WeekInfo weekInfo = parser.getWeek(parity);
+        WeekInfo weekInfo = parser.getWeek(date);
         DayInfo dayInfo = weekInfo.getDay(date.dayNameEn);
 
         ClassInfo classes[] = new ClassInfo[dayInfo.classList.size()];
@@ -147,8 +145,7 @@ public class TimetableFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            parser = XMLParser.Builder.build(activity, activity,
-                    groupNumber, subgroupNumber);
+            parser = XMLParser.Builder.build(activity, groupNumber, subgroupNumber);
             return null;
         }
 
