@@ -3,7 +3,7 @@ package ru.spbau.mit.auTimetable;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
+import android.widget.Toast;
 import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -18,16 +18,17 @@ public class XMLParser {
 
     private int group;
     private int subgroup;
+    private final Activity activity;
 
-    private XMLParser() {
-        //this one only used if some errors with creating a file occurred.
+    private XMLParser(Activity activity) {
+        this.activity = activity;
     }
 
-    private XMLParser(File file, int group, int subgroup) {
+    private XMLParser(File file, Activity activity, int group, int subgroup) {
         this.group = group;
         this.subgroup = subgroup;
+        this.activity = activity;
 
-        //TODO we may need to load this file from server first
         try {
             FileInputStream fis = new FileInputStream(file);
             DocumentBuilderFactory dbFactory
@@ -36,12 +37,14 @@ public class XMLParser {
             doc = dBuilder.parse(fis);
             doc.getDocumentElement().normalize();
         } catch (Exception e) {
+            //showError("Could not parse timetable", activity);
             e.printStackTrace();
         }
     }
 
     public WeekInfo getWeek(int parity) {
         if (doc == null) {
+            //showError("No timetable found", activity);
             return new WeekInfo(group, subgroup, parity);
         }
 
@@ -127,27 +130,44 @@ public class XMLParser {
     }
 
     public static class Builder {
-        public static XMLParser build(Context context, Activity activity, int group, int subgroup) {
+        public static XMLParser build(Activity activity, Context context, int group, int subgroup) {
             String fileName = Integer.toString(group) + "_" + Integer.toString(subgroup) + ".xml";
             File file = new File(context.getCacheDir(), fileName);
 
             if (file.exists()) {
-                return new XMLParser(file, group, subgroup);
+                return new XMLParser(file, activity, group, subgroup);
             } else {
-                try {
-                    file = File.createTempFile(fileName, null, context.getCacheDir());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return new XMLParser();//this XMLParse is empty
-                }
-                Downloader downloader = new Downloader(group, subgroup, file, activity);
-                if (downloader.run()) {
-                    return new XMLParser(file, group, subgroup);
+                Downloader downloader = new Downloader(group, subgroup, activity);
+                Downloader.ResultContainer timetable = downloader.download();
+
+                if (!timetable.isError) {
+                    try {
+                        FileOutputStream fos = new FileOutputStream(file);
+                        try {
+                            fos.write(timetable.content.getBytes());
+                        } finally {
+                            fos.close();
+                        }
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                        showError("Could not create file in cache.", activity);
+
+                        return new XMLParser(activity);
+                    }
+                    return new XMLParser(file, activity, group, subgroup);
                 } else {
-                    //for some reason (network is unavailable or server is down) we could not download file
-                    return new XMLParser();
+                    showError(timetable.error, activity);
+                    return new XMLParser(activity);
                 }
             }
         }
+    }
+
+    private static void showError(final String error, final Activity activity) {
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(activity, error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

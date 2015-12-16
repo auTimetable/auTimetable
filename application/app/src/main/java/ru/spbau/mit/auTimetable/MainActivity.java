@@ -2,11 +2,11 @@ package ru.spbau.mit.auTimetable;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 
@@ -154,7 +154,6 @@ public class MainActivity extends ActionBarActivity
                 fragment = new TimetableFragment();
             }
 
-            System.out.println("new timetable fragment created");
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             args.putInt("group_number", groupNumber);
@@ -194,6 +193,7 @@ public class MainActivity extends ActionBarActivity
         }
 
         @Override
+        @Deprecated
         public void onAttach(Activity activity) {
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(

@@ -1,11 +1,13 @@
 package ru.spbau.mit.auTimetable;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,13 @@ public class TimetableFragment extends Fragment {
     private TextView currentDayName;
     private TextView currentDate;
 
+    private Activity activity;
+
+    private int groupNumber;
+    private int subgroupNumber;
+
+    ProgressDialog progressDialog;
+
     private Date date;
 
     private boolean wasSetUp = false;
@@ -27,6 +36,8 @@ public class TimetableFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     public TimetableFragment() {
+        groupNumber = 0;
+        subgroupNumber = 0;
         date = new Date();
     }
 
@@ -42,17 +53,13 @@ public class TimetableFragment extends Fragment {
         setUp(inflater, container);
 
         Bundle args = getArguments();
-        int groupNumber = args.getInt("group_number", 0);
-        int subgroupNumber = args.getInt("subgroup_number", 0);
+        groupNumber = args.getInt("group_number", 0);
+        subgroupNumber = args.getInt("subgroup_number", 0);
 
-        parser = XMLParser.Builder.build(getActionBar().getThemedContext(),
-                getActivity(), groupNumber, subgroupNumber);
-
-        date.update();
-        currentDayName.setText(date.dayName);
-        currentDate.setText(date.day + "." + date.month + "." + date.year);
-
-        updateDayTimetable();
+        activity = getActivity();
+        progressDialog = ProgressDialog.show(getActivity(), "Loading",
+                "Loading timetable, please wait...", false, false);
+        new AsyncCreateTimetable().execute();
 
         return mWholeScreen;
     }
@@ -104,6 +111,14 @@ public class TimetableFragment extends Fragment {
         wasSetUp = true;
     }
 
+    private void setCurDateAndUpdateTimetable() {
+        date.update();
+        currentDayName.setText(date.dayName);
+        currentDate.setText(date.day + "." + date.month + "." + date.year);
+
+        updateDayTimetable();
+    }
+
     private void updateDayTimetable() {
         int parity = 0;
 
@@ -121,6 +136,37 @@ public class TimetableFragment extends Fragment {
     }
 
     private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+        return ((AppCompatActivity) activity).getSupportActionBar();
+    }
+
+    private class AsyncCreateTimetable extends AsyncTask<Void, Integer, Void> {
+        @Override
+        protected void onPreExecute() {
+            TimetableFragment.this.progressDialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            parser = XMLParser.Builder.build(activity, activity,
+                    groupNumber, subgroupNumber);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressDialog.dismiss();
+
+            activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    setCurDateAndUpdateTimetable();
+                }
+            });
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values[0]);
+        }
     }
 }
