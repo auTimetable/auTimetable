@@ -49,4 +49,54 @@
         <servlet-name>timetable</servlet-name>
         <url-pattern>/timetable</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>files_list</servlet-name>
+        <servlet-class>ru.spbau.auTimetable.server.FilesListServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>files_list</servlet-name>
+        <url-pattern>/files_list</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>scores_list</servlet-name>
+        <servlet-class>ru.spbau.auTimetable.server.ScoresListServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>scores_list</servlet-name>
+        <url-pattern>/scores_list</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>add_scores</servlet-name>
+        <servlet-class>ru.spbau.auTimetable.server.AddScoresServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>add_scores</servlet-name>
+        <url-pattern>/add_scores</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>delete_scores</servlet-name>
+        <servlet-class>ru.spbau.auTimetable.server.DeleteScoresServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>delete_scores</servlet-name>
+        <url-pattern>/delete_scores</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>get_scores</servlet-name>
+        <servlet-class>ru.spbau.auTimetable.server.GetScoresServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>get_scores</servlet-name>
+        <url-pattern>/get_scores</url-pattern>
+    </servlet-mapping>
 </web-app>

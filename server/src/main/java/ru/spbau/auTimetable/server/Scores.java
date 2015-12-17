@@ -7,30 +7,39 @@ import com.googlecode.objectify.annotation.Index;
 import java.util.Date;
 
 @Entity
-public class UploadedFile {
-    @Id public Long id;
+public class Scores {
+    @Id
+    public Long id;
 
-    @Index String key;
+    //TODO change names `key` and `fullKey`
+    @Index
+    public String key;
+    @Index
+    public String fullKey;
     public String groupNumber;
     public String subgroupNumber;
-    public String gsFileName;
-    @Index public Date date;
+    public String subject;
+    public String link;
+    @Index
+    public Date date;
 
     /**
      * Takes all important fields
      **/
-    public UploadedFile() {
+    public Scores() {
         date = new Date();
     }
 
-    public UploadedFile(String groupNumber, String subgroupNumber,
-                        String gsFileName) {
+    public Scores(String groupNumber, String subgroupNumber,
+                  String subject, String link) {
         this();
         this.groupNumber = groupNumber;
         this.subgroupNumber = subgroupNumber;
-        this.gsFileName = gsFileName;
+        this.subject = subject;
+        this.link = link;
 
         key = groupNumber + "_" + subgroupNumber;
+        fullKey = subject + "_" + key;
     }
 
 }

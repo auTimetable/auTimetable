@@ -8,6 +8,9 @@
 <html>
 <head>
     <link type="text/css" rel="stylesheet" href="/stylesheets/main.css"/>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -19,14 +22,39 @@
         pageContext.setAttribute("user", user);
 %>
 
-<p>Hello, <b>${fn:escapeXml(user.nickname)}</b>! (You can
-    <a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">sign out</a>.)</p>
+    <p>Привет, <b>${fn:escapeXml(user.nickname)}</b>!</p>
+
     <br/>
-    <a href="../submit.jsp">submit new timetable</a>
+
+    <div class="container-fluid">
+        <div class="row">
+            <a href="../submit.jsp">Загрузить новое расписание</a>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <a href="../files_list">Просмотр расписаний на сервере</a>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <a href="../scores.jsp">Просмотр результатов</a>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="container-fluid">
+        <div class="row">
+            <a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">выйти</a>
+        </div>
+    </div>
 <%
-} else {
+    } else {
 %>
-    <a href="<%= userService.createLoginURL(request.getRequestURI()) %>">Sign in</a>
+    <a href="<%= userService.createLoginURL(request.getRequestURI()) %>">войти</a>
 <%
     }
 %>
