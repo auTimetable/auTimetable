@@ -12,16 +12,16 @@ import java.util.Hashtable;
 import java.util.Map;
 
 
-public class XMLParser {
+public class XMLTimetableParser {
     private Document doc = null;
 
     private int group;
     private int subgroup;
 
-    private XMLParser() {
+    private XMLTimetableParser() {
     }
 
-    private XMLParser(File file, int group, int subgroup) {
+    private XMLTimetableParser(File file, int group, int subgroup) {
         this.group = group;
         this.subgroup = subgroup;
 
@@ -150,14 +150,15 @@ public class XMLParser {
     }
 
     public static class Builder {
-        public static XMLParser build(Activity activity, int group, int subgroup) {
-            String fileName = Integer.toString(group) + "_" + Integer.toString(subgroup) + ".xml";
+        public static XMLTimetableParser build(Activity activity, int group, int subgroup) {
+            String fileName = Integer.toString(group) + "_" +
+                    Integer.toString(subgroup) + ".timetable.xml";
             File file = new File(activity.getCacheDir(), fileName);
 
             if (file.exists()) {
-                return new XMLParser(file, group, subgroup);
+                return new XMLTimetableParser(file, group, subgroup);
             } else {
-                Downloader downloader = new Downloader(group, subgroup, activity);
+                Downloader downloader = new Downloader("timetable", group, subgroup, activity);
                 Downloader.ResultContainer timetable = downloader.download();
 
                 if (!timetable.isError) {
@@ -172,12 +173,12 @@ public class XMLParser {
                         e.printStackTrace();
                         showError("Could not create file in cache.", activity);
 
-                        return new XMLParser();
+                        return new XMLTimetableParser();
                     }
-                    return new XMLParser(file, group, subgroup);
+                    return new XMLTimetableParser(file, group, subgroup);
                 } else {
                     showError(timetable.error, activity);
-                    return new XMLParser();
+                    return new XMLTimetableParser();
                 }
             }
         }

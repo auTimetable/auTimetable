@@ -172,10 +172,16 @@ public class MainActivity extends AppCompatActivity
 
         public static Fragment newInstance(int sectionNumber) {
             Fragment fragment;
-            if (sectionNumber != 1) {
-                fragment = new PlaceholderFragment();
-            } else {
-                fragment = new TimetableFragment();
+
+            switch (sectionNumber) {
+                case 1:
+                    fragment = new TimetableFragment();
+                    break;
+                case 4:
+                    fragment = new ScoresFragment();
+                    break;
+                default:
+                    fragment = new PlaceholderFragment();
             }
 
             Bundle args = new Bundle();
@@ -195,17 +201,11 @@ public class MainActivity extends AppCompatActivity
                                  Bundle savedInstanceState) {
             View rootView;
             switch(this.getArguments().getInt(ARG_SECTION_NUMBER)) {
-                case 1:
-                    rootView = inflater.inflate(R.layout.fragment_timetable, container, false);
-                    break;
                 case 2:
                     rootView = inflater.inflate(R.layout.fragment_announcements, container, false);
                     break;
                 case 3:
                     rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
-                    break;
-                case 4:
-                    rootView = inflater.inflate(R.layout.fragment_scores, container, false);
                     break;
                 case 5:
                     rootView = inflater.inflate(R.layout.fragment_about, container, false);

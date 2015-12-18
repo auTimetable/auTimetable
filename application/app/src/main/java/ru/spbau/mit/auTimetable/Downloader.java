@@ -15,8 +15,10 @@ public class Downloader {
     private final int subgroup;
     private final Activity activity;
     private final ResultContainer result;
+    private final String prefix;
 
-    public Downloader(int group, int subgroup, Activity activity) {
+    public Downloader(String prefix, int group, int subgroup, Activity activity) {
+        this.prefix = prefix;
         this.group = group;
         this.subgroup = subgroup;
         this.activity = activity;
@@ -38,7 +40,7 @@ public class Downloader {
     }
 
     private String createUrl() {
-        return "https://autimetable-1151.appspot.com/timetable?group_number=" + group +
+        return "https://autimetable-1151.appspot.com/" + prefix + "?group_number=" + group +
                 "&subgroup_number=" + subgroup;
     }
 
@@ -85,6 +87,8 @@ public class Downloader {
                     result.isError = true;
                     result.error = content;
                 } else {
+                    //String clean = content.replaceAll( "&([^;]+(?!(?:\\w|;)))", "&amp;$1" );
+                    System.out.println(content);
                     result.content = content;
                 }
             }

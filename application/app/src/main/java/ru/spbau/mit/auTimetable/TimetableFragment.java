@@ -31,7 +31,7 @@ public class TimetableFragment extends Fragment {
 
     private boolean wasSetUp = false;
 
-    private XMLParser parser = null;
+    private XMLTimetableParser parser = null;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -145,7 +145,7 @@ public class TimetableFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            parser = XMLParser.Builder.build(activity, groupNumber, subgroupNumber);
+            parser = XMLTimetableParser.Builder.build(activity, groupNumber, subgroupNumber);
             return null;
         }
 
