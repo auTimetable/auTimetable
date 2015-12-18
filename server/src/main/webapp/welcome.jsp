@@ -34,12 +34,6 @@
 
     <div class="container-fluid">
         <div class="row">
-            <a href="../files_list">Просмотр расписаний на сервере</a>
-        </div>
-    </div>
-
-    <div class="container-fluid">
-        <div class="row">
             <a href="../scores.jsp">Просмотр результатов</a>
         </div>
     </div>

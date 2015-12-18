@@ -79,7 +79,7 @@
         <%
             } else {
         %>
-        <h1> No scores found for this group/subgroup </h1>
+        <h1> Никаких записей не найдено </h1>
         <%
             }
         %>
@@ -90,23 +90,23 @@
 
             <br/>
 
-            <h2> You can add scores link </h2>
+            <h2> Вы можете добавить ссылки на результаты </h2>
             <form action="/add_scores" method="get" enctype="multipart/form-data" id="add_link_form">
               <input type="hidden" name="group_number" value="<%= groupNumber %>">
               <input type="hidden" name="subgroup_number" value="<%= subgroupNumber %>">
               <div class="form-group">
-                <label for="subject" class="col-sm-2 control-label">Subject</label>
+                <label for="subject" class="col-sm-2 control-label">Предмет</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" name="subject" id="subject" placeholder="subject">
+                  <input type="text" class="form-control" name="subject" id="subject" placeholder="предмет">
                 </div>
               </div>
               <div class="form-group">
-                <label for="link" class="col-sm-2 control-label">Link</label>
+                <label for="link" class="col-sm-2 control-label">Ссылка</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="link" id="link" placeholder="link">
+                    <input type="text" class="form-control" name="link" id="link" placeholder="ссылка">
                 </div>
               </div>
-              <button type="submit" class="btn btn-success">Add</button>
+              <button type="submit" class="btn btn-success">Добавить</button>
             </form>
 
         <%

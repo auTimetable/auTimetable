@@ -28,18 +28,12 @@ public class GetScoresServlet extends HttpServlet {
 
         res.setContentType ("text/plain;charset=utf-8");
         PrintWriter output = res.getWriter();
-        output.println("<scoresList>");
 
+        output.println(scoresList.size());
         for (Scores scores : scoresList) {
-            output.println("    <scores>");
-            output.println("        <subject>" +
-                    scores.subject + "</subject>");
-            output.println("        <link>" +
-                    scores.link + "</link>");
-            output.println("    </scores>");
+            output.println(scores.subject);
+            output.println(scores.link);
         }
-
-        output.println("</scoresList>");
         output.close();
     }
 }
