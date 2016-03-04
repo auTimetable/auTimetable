@@ -1,0 +1,158 @@
+\documentclass[12pt]{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsthm, amsmath, amssymb}
+\usepackage{hyperref}
+\usepackage{datetime}
+\usepackage{cmap}
+\usepackage{enumerate}
+\usepackage{color}
+\usepackage{picture}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usetikzlibrary{positioning,shadows,arrows}
+
+\usepackage{bold-extra}
+
+\def\EPS{\varepsilon}
+\def\SO{\Rightarrow}
+\def\EQ{\Leftrightarrow}
+\def\t{\texttt}
+
+\usetheme{Warsaw}
+
+\let\Tiny=\tiny
+\useoutertheme{infolines}
+
+\tikzset {
+    fact/.style={rectangle, draw=none, rounded corners=1mm, fill=blue, drop shadow,
+        text centered, anchor=north, text=white},
+    new/.style={circle, draw=none, fill=orange, circular drop shadow,
+        text centered, anchor=north, text=white},
+    state/.style={circle, draw=none, fill=red, circular drop shadow,
+        text centered, anchor=north, text=white},
+    leaf/.style={rectangle, draw=black,
+    minimum width=0.5em, minimum height=0.5em},
+    cur/.style={circle, draw=none, fill=green, circular drop shadow,
+        text centered, anchor=north, text=black},
+    level distance=1.0cm, anchor=south
+}
+
+\begin{document}
+
+\title{Расписание занятий для АУ}
+
+\author[]{
+    Кравченко Дмитрий \\
+    Розплохас Дмитрий \\ 
+}
+\institute[]{Санкт-Петербургский Академический университет}
+\date{18 декабря 2015 года}
+
+\frame{\titlepage}
+
+\begin{frame}{Цели и задачи}
+
+    \begin{itemize}
+
+        \item <1-> Приложение для просмотра расписания занятий
+
+        \item <2-> Просмотр объявлений
+        
+        \item <3-> Сервер для загрузки расписания
+
+        \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Технические подробности}
+
+    \begin{itemize}
+    
+        \item <1-> Проект написан на Java
+
+        \item <2-> Для удобства работы в команде использовался git
+
+        \item <3-> Работа с сетью
+
+        \item <4-> Внешнии библеотеки: Google App Engine и ко
+
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Результаты}
+    
+    \begin{itemize}
+    
+        \item <1-> Вкладка Расписание
+
+        \item <2-> Вкладка Результаты
+
+        \item <3-> Сервер, поддерживающий загрузку расписания и ссылок на результаты
+
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Приложение}
+    
+    \begin{itemize}
+
+    \item <1-> Если файл уже загружен,
+               то Wi-fi совсем не нужен!
+
+    \item <2-> Файлы сохраняются в кэше
+
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Сервер}
+    
+    \begin{itemize}
+
+    \item <1-> Загружать расписание можно только в формате xml
+
+    \item <2-> Возможность добавлять и удалять ссылки на результаты
+
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Недоделки}
+    
+    \begin{itemize}
+
+    \item <1-> Нет просмотра уведомлений
+
+    \item <2-> Нет контактов
+
+    \item <2-> Нет нотификаций
+
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Ссылки}
+    
+    \begin{itemize}
+
+        \item <1-> Видео приложения: https://www.youtube.com/watch?v=Nd5dpVuJPBM\&feature=youtu.be
+
+        \item <2-> Репозиторий: https://github.com/auTimetable/auTimetable
+
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Конец}
+
+    Вопросы?
+
+\end{frame}
+
+\end{document}

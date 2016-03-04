@@ -61,6 +61,7 @@ public class ScoresFragment extends Fragment {
         return mWholeScreen;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

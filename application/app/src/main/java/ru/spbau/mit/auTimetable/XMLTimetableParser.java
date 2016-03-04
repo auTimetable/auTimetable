@@ -116,7 +116,7 @@ public class XMLTimetableParser {
         String end   = lesson.getAttribute("end");
         TimeInterval ti = parseTimeInterval(start, end);
 
-        Map<String, String> infoFieldsValues = new Hashtable<String, String>();
+        Map<String, String> infoFieldsValues = new Hashtable<>();
 
         for (int i = 0; i < infoFields.getLength(); i++) {
             Node curField = infoFields.item(i);

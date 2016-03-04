@@ -19,7 +19,7 @@ public class ScoresParser {
     }
 
     public ArrayList<ScoresLink> getLinks() {
-        ArrayList<ScoresLink> result = new ArrayList<ScoresLink>();
+        ArrayList<ScoresLink> result = new ArrayList<>();
         if (file == null) {
             return result;
         }
@@ -37,7 +37,7 @@ public class ScoresParser {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<ScoresLink>();
+            return new ArrayList<>();
         }
 
         return result;

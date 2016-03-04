@@ -20,19 +20,8 @@ public class WeekInfo {
         this.subgroup = subgroup;
         this.parity = parity;
 
-        dayNames = new ArrayList<String>();
-        dayNames.add("sunday");
-        dayNames.add("monday");
-        dayNames.add("tuesday");
-        dayNames.add("wednesday");
-        dayNames.add("thursday");
-        dayNames.add("friday");
-        dayNames.add("saturday");
-
-        dayList = new ArrayList<DayInfo>();
-        for (int i = 0; i < 7; i++) {
-            dayList.add(new DayInfo(dayNames.get(i)));
-        }
+        setUpDaysNames();
+        setUpDayList();
     }
 
     public void setDay(DayInfo dayInfo) {
@@ -41,5 +30,23 @@ public class WeekInfo {
 
     public DayInfo getDay(String dayName) {
         return dayList.get(dayNames.indexOf(dayName));
+    }
+
+    private void setUpDaysNames() {
+        dayNames = new ArrayList<>();
+        dayNames.add("sunday");
+        dayNames.add("monday");
+        dayNames.add("tuesday");
+        dayNames.add("wednesday");
+        dayNames.add("thursday");
+        dayNames.add("friday");
+        dayNames.add("saturday");
+    }
+
+    private void setUpDayList() {
+        dayList = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            dayList.add(new DayInfo(dayNames.get(i)));
+        }
     }
 }

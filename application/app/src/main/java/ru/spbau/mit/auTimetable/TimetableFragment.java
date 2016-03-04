@@ -64,6 +64,7 @@ public class TimetableFragment extends Fragment {
         return mWholeScreen;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -78,37 +79,43 @@ public class TimetableFragment extends Fragment {
 
         mWholeScreen = (LinearLayout) inflater.inflate(
                 R.layout.fragment_timetable, container, false);
-
-        View mDayInformation = mWholeScreen.findViewById(R.id.day_information);
         mDayTimetable = (ListView) mWholeScreen.findViewById(R.id.day_timetable);
 
-        currentDayName = (TextView) mDayInformation.findViewById(R.id.day);
-        currentDate = (TextView) mDayInformation.findViewById(R.id.date);
+        setUpDayInfo();
+        setUpButtons();
 
+        wasSetUp = true;
+    }
+
+    private void setUpDayInfo() {
+        View DayInformation = mWholeScreen.findViewById(R.id.day_information);
+        currentDayName = (TextView) DayInformation.findViewById(R.id.day);
+        currentDate = (TextView) DayInformation.findViewById(R.id.date);
+    }
+
+    private void setUpButtons() {
         Button leftButton = (Button) mWholeScreen.findViewById(R.id.left_button);
         Button rightButton = (Button) mWholeScreen.findViewById(R.id.right_button);
 
         leftButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                date.previousDay();
-                currentDayName.setText(date.dayName);
-                currentDate.setText(date.day + "." + date.month + "." + date.year);
-                updateDayTimetable();
-            }
+                @Override
+                public void onClick(View v) {
+                    date.previousDay();
+                    currentDayName.setText(date.dayName);
+                    currentDate.setText(date.day + "." + date.month + "." + date.year);
+                    updateDayTimetable();
+                }
         });
 
         rightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                date.nextDay();
-                currentDayName.setText(date.dayName);
-                currentDate.setText(date.day + "." + date.month + "." + date.year);
-                updateDayTimetable();
-            }
+                @Override
+                public void onClick(View v) {
+                    date.nextDay();
+                    currentDayName.setText(date.dayName);
+                    currentDate.setText(date.day + "." + date.month + "." + date.year);
+                    updateDayTimetable();
+                }
         });
-
-        wasSetUp = true;
     }
 
     private void setCurDateAndUpdateTimetable() {
