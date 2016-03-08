@@ -1,5 +1,5 @@
 function deleteScores(scoresFullKey, groupNumber, subgroupNumber) {
-    var path="/delete_scores?scores_full_key=" + scoresFullKey +
+    var path="/delete_scores?scores_full_key=" + encodeURIComponent(scoresFullKey) +
             "&group_number=" + groupNumber +
             "&subgroup_number=" + subgroupNumber;
 

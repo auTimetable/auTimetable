@@ -4,6 +4,13 @@
          xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+        </jsp-property-group>
+    </jsp-config>
+
     <welcome-file-list>
         <welcome-file>welcome.jsp</welcome-file>
     </welcome-file-list>
@@ -25,15 +32,15 @@
         <servlet-class>ru.spbau.auTimetable.server.UploadServlet</servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>serve</servlet-name>
-        <servlet-class>ru.spbau.auTimetable.server.ServeServlet</servlet-class>
-    </servlet>
-
     <servlet-mapping>
         <servlet-name>upload</servlet-name>
         <url-pattern>/upload</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>serve</servlet-name>
+        <servlet-class>ru.spbau.auTimetable.server.ServeServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>serve</servlet-name>
@@ -98,5 +105,15 @@
     <servlet-mapping>
         <servlet-name>get_scores</servlet-name>
         <url-pattern>/get_scores</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>create_timetable</servlet-name>
+        <servlet-class>ru.spbau.auTimetable.server.CreateTimetableServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>create_timetable</servlet-name>
+        <url-pattern>/create_timetable</url-pattern>
     </servlet-mapping>
 </web-app>

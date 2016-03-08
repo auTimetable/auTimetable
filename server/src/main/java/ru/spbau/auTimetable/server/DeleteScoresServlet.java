@@ -25,8 +25,8 @@ public class DeleteScoresServlet extends HttpServlet {
             return;
         }
 
-        String groupNumber = GlobalFunctions.fromParam(req.getParameter("group_number"), "0");
-        String subgroupNumber = GlobalFunctions.fromParam(req.getParameter("subgroup_number"), "0");
+        String groupNumber = GlobalNamespace.fromParam(req.getParameter("group_number"), "0");
+        String subgroupNumber = GlobalNamespace.fromParam(req.getParameter("subgroup_number"), "0");
 
         String scoresFullKey = req.getParameter("scores_full_key");
 

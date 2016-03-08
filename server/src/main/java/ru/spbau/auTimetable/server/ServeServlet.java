@@ -12,7 +12,7 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 
 public class ServeServlet extends HttpServlet {
     private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    private String bucket = "autimetable-1151.appspot.com";
+    //private String bucket = "autimetable-1151.appspot.com";
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res)

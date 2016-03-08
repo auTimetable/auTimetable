@@ -16,31 +16,34 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
     </head>
+
     <body>
         <h1> Посмотреть список результатов </h1>
 
-            <form action="/scores_list" method="get" enctype="multipart/form-data">
-              <div class="form-group">
+        <form action="/scores_list" method="get" enctype="multipart/form-data">
+            <div class="form-group">
                 <label for="group_number" class="col-sm-2 control-label">Номер группы</label>
                 <div class="col-sm-10">
-                  <input type="number" class="form-control" name="group_number" id="group_number" placeholder="номер группы">
+                    <input type="number" class="form-control" name="group_number" id="group_number" placeholder="номер группы">
                 </div>
-              </div>
-              <div class="form-group">
+            </div>
+
+            <div class="form-group">
                 <label for="subgroup_number" class="col-sm-2 control-label">Номер подгруппы</label>
                 <div class="col-sm-10">
                     <input type="number" class="form-control" name="subgroup_number" id="subgroup_number" placeholder="номер подгруппы">
                 </div>
-              </div>
-              <button type="submit" class="btn btn-success">Получить</button>
-            </form>
-
-            <br/>
-
-            <div class="container-fluid">
-                <div class="row">
-                    <a href="../welcome.jsp"> Обратно на главную </a>
-                </div>
             </div>
+
+            <button type="submit" class="btn btn-success">Получить</button>
+        </form>
+
+        <br/>
+
+        <div class="container-fluid">
+            <div class="row">
+                <a href="../welcome.jsp"> Обратно на главную </a>
+            </div>
+        </div>
     </body>
 </html>

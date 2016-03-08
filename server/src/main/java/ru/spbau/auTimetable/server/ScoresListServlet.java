@@ -14,8 +14,8 @@ public class ScoresListServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        String groupNumber = GlobalFunctions.fromParam(req.getParameter("group_number"), "0");
-        String subgroupNumber = GlobalFunctions.fromParam(req.getParameter("subgroup_number"), "0");
+        String groupNumber = GlobalNamespace.fromParam(req.getParameter("group_number"), "0");
+        String subgroupNumber = GlobalNamespace.fromParam(req.getParameter("subgroup_number"), "0");
         String key = groupNumber + "_" + subgroupNumber;
 
         List<Scores> scores = ObjectifyService.ofy()
