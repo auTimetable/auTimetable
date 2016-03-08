@@ -1,6 +1,15 @@
 package ru.spbau.auTimetable.server;
 
+import com.google.appengine.tools.cloudstorage.GcsService;
+import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
+import com.google.appengine.tools.cloudstorage.RetryParams;
+
 public class GlobalNamespace {
+    public static final String gcsBucket = "autimetable-1151.appspot.com";
+
+    public static final GcsService gcsService =
+            GcsServiceFactory.createGcsService(RetryParams.getDefaultInstance());
+
     public static String days[] = new String[]{
             "Понедельник",
             "Вторник",
@@ -35,5 +44,14 @@ public class GlobalNamespace {
         } catch(NumberFormatException e) {
             return value;
         }
+    }
+
+    public static String nDigit(int value, int n) {
+        String res = Integer.toString(value);
+        while (res.length() < n) {
+            res = "0" + res;
+        }
+
+        return res;
     }
 }

@@ -50,7 +50,7 @@
 
             <br />
 
-            <form class="form-horizontal col-md-10 col-md-offset-1" role="form" action="/create_timetable" method="post" enctype="multipart/form-data">
+            <form class="form-horizontal col-md-10 col-md-offset-1" role="form" action="/create_timetable" method="post">
                 <div class="form-group center-block">
                     <label for="group_number" class="col-sm-2 control-label">Номер группы</label>
                     <div class="col-sm-2">
@@ -62,13 +62,6 @@
                     <label for="subgroup_number" class="col-sm-2 control-label">Номер подгруппы</label>
                     <div class="col-sm-2">
                         <input type="number" class="form-control" name="subgroup_number" id="subgroup_number" placeholder="номер подгруппы">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="parity" class="col-sm-2 control-label">Четность недели</label>
-                    <div class="col-sm-2">
-                        <input type="number" class="form-control" name="parity" id="parity" placeholder="четность недели">
                     </div>
                 </div>
 
@@ -111,7 +104,7 @@
 
                 <div class="tab-content">
                     <div id="parity0_week" class="tab-pane fade in active">
-                        <div iclass="panel-group">
+                        <%--<div class="panel-group">--%>
                             <%
                             for (String day : days) {
                             %>
@@ -134,14 +127,14 @@
                                     </div>
 
                                 </div>
-                                <input type="number" name="parity0_<%= day %>_counter" id="parity0_<%= day %>_counter" value="0">
+                                <input type="number" name="parity0_<%= day %>_counter" id="parity0_<%= day %>_counter" value="0" style="display: none;">
                             <%
                             }
                             %>
-                        </div>
+                        <%--</div>--%>
                     </div>
-                    <div id="parity1_week" class="tab-pane fade in active">
-                        <div iclass="panel-group">
+                    <div id="parity1_week" class="tab-pane fade">
+                        <%--<div class="panel-group">--%>
                             <%
                             for (String day : days) {
                             %>
@@ -164,11 +157,11 @@
                                     </div>
 
                                 </div>
-                                <input type="number" name="parity1_<%= day %>_counter" id="parity1_<%= day %>_counter" value="0">
+                                <input type="number" name="parity1_<%= day %>_counter" id="parity1_<%= day %>_counter" value="0" style="display: none;">
                             <%
                             }
                             %>
-                        </div>
+                        <%--</div>--%>
                     </div>
                 </div>
 

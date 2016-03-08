@@ -30,10 +30,11 @@ public class TimetableServlet extends HttpServlet {
                 .list();
 
         if (files.isEmpty()) {
-            res.getWriter().print("There is no timetable for this group and subgroup");
+            res.getWriter().print("Not found.");
         } else {
             BlobKey blobKey = new BlobKey(files.get(0).gsFileName);
             blobstoreService.serve(blobKey, res);
+            res.setContentType("text/xml");
         }
     }
 }

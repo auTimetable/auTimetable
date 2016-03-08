@@ -2,18 +2,12 @@ package ru.spbau.auTimetable.server;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileService;
-import com.google.appengine.api.files.FileServiceFactory;
-import com.google.appengine.api.files.FileWriteChannel;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -21,31 +15,55 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.tools.cloudstorage.*;
 import com.googlecode.objectify.ObjectifyService;
 
-@SuppressWarnings("deprecation")
 public class CreateTimetableServlet extends HttpServlet {
-    private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+    private TimetableSkeleton timetableSkeleton;
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+        UserService userService = UserServiceFactory.getUserService();
+        User user = userService.getCurrentUser();
+        if (!UserChecker.isAdminUser(user)) {
+            res.sendRedirect("/");
+            return;
+        }
+
         String timetable = getXML(req);
 
-        FileService fileService = FileServiceFactory.getFileService();
-        AppEngineFile file = fileService.createNewBlobFile("text/plain");
-
-        FileWriteChannel writeChannel = fileService.openWriteChannel(file, true);
-
-        writeChannel.write(ByteBuffer.wrap(timetable.getBytes()));
-        writeChannel.closeFinally();
-        BlobKey blobKey = fileService.getBlobKey(file);
+        String blobKey = saveFile(timetable).getKeyString();
+        saveToObjectify(blobKey);
 
         res.sendRedirect("/serve?blob-key=" + blobKey);
     }
 
     private String getXML(HttpServletRequest req) {
-        TimetableSkeleton timetableSkeleton = new TimetableSkeleton(req);
+        timetableSkeleton = new TimetableSkeleton(req);
+
         return timetableSkeleton.toXML();
+    }
+
+    private BlobKey saveFile(String timetable) throws IOException {
+        String fileName = timetableSkeleton.groupNumber + "_" + timetableSkeleton.subgroupNumber + ".xml";
+        GcsFilename gcsFileName = new GcsFilename(GlobalNamespace.gcsBucket, fileName);
+        GcsOutputChannel outputChannel =
+                GlobalNamespace.gcsService.createOrReplace(gcsFileName, GcsFileOptions.getDefaultInstance());
+        outputChannel.write(ByteBuffer.wrap(timetable.getBytes()));
+        outputChannel.close();
+
+        return blobstoreService.createGsBlobKey(
+                "/gs/" + gcsFileName.getBucketName() + "/" + gcsFileName.getObjectName());
+    }
+
+    private void saveToObjectify(String blobKey) {
+        UploadedFile uploadedFile = new UploadedFile(
+                Integer.toString(timetableSkeleton.groupNumber),
+                Integer.toString(timetableSkeleton.subgroupNumber),
+                blobKey
+        );
+        ObjectifyService.ofy().save().entity(uploadedFile).now();
     }
 }

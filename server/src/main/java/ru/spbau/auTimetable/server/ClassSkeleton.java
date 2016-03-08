@@ -11,12 +11,42 @@ public class ClassSkeleton {
 
     private HttpServletRequest req;
     private int classNumber;
+    private String parityPrefix;
 
-    public ClassSkeleton(int classNumber, HttpServletRequest req) {
+    public ClassSkeleton(String parityPrefix, int classNumber, HttpServletRequest req) {
+        this.parityPrefix = parityPrefix;
         this.req = req;
         this.classNumber = classNumber;
 
         build();
+    }
+
+    public String toXML() {
+        String res = "";
+
+        res += openTag();
+        res += mainInfo();
+        res += closeTag();
+
+        return res;
+    }
+
+    private String openTag() {
+        return "<class start=\"" + GlobalNamespace.nDigit(startHour, 2) + ":" + GlobalNamespace.nDigit(startMinute, 2) +
+                "\" end=\"" + GlobalNamespace.nDigit(endHour, 2) + ":" + GlobalNamespace.nDigit(endMinute, 2) + "\">";
+    }
+
+    private String mainInfo() {
+        String subjectString   = "<subject>" + subject + "</subject>";
+        String typeString      = "<type>" + type + "</type>";
+        String classroomString = "<classroom>" + subject + "</classroom>";
+        String teacherString   = "<teacher>" + subject + "</teacher>";
+
+        return subjectString + typeString + classroomString + teacherString;
+    }
+
+    private String closeTag() {
+        return "</class>";
     }
 
     private void build() {
@@ -25,17 +55,25 @@ public class ClassSkeleton {
     }
 
     private void setTime() {
-        startHour   = GlobalNamespace.fromParamToInt(req.getParameterValues("start_hour")[classNumber], 0);
-        startMinute = GlobalNamespace.fromParamToInt(req.getParameterValues("start_minute")[classNumber], 0);
-        endHour     = GlobalNamespace.fromParamToInt(req.getParameterValues("end_hour")[classNumber], 0);
-        endMinute   = GlobalNamespace.fromParamToInt(req.getParameterValues("end_minute")[classNumber], 0);
+        startHour   = GlobalNamespace.fromParamToInt(
+                req.getParameterValues(parityPrefix + "start_hour")[classNumber], 0);
+        startMinute = GlobalNamespace.fromParamToInt(
+                req.getParameterValues(parityPrefix + "start_minute")[classNumber], 0);
+        endHour     = GlobalNamespace.fromParamToInt(
+                req.getParameterValues(parityPrefix + "end_hour")[classNumber], 0);
+        endMinute   = GlobalNamespace.fromParamToInt(
+                req.getParameterValues(parityPrefix + "end_minute")[classNumber], 0);
     }
 
     private void setMainInfo() {
         String none = "None";
-        subject   = GlobalNamespace.fromParam(req.getParameterValues("subject")[classNumber], none);
-        type      = GlobalNamespace.fromParam(req.getParameterValues("type")[classNumber], none);
-        classroom = GlobalNamespace.fromParam(req.getParameterValues("classroom")[classNumber], none);
-        teacher   = GlobalNamespace.fromParam(req.getParameterValues("teacher")[classNumber], none);
+        subject   = GlobalNamespace.fromParam(
+                req.getParameterValues(parityPrefix + "subject")[classNumber], none);
+        type      = GlobalNamespace.fromParam(
+                req.getParameterValues(parityPrefix + "type")[classNumber], none);
+        classroom = GlobalNamespace.fromParam(
+                req.getParameterValues(parityPrefix + "classroom")[classNumber], none);
+        teacher   = GlobalNamespace.fromParam(
+                req.getParameterValues(parityPrefix + "teacher")[classNumber], none);
     }
 }

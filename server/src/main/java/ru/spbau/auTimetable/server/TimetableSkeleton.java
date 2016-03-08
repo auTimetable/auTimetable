@@ -7,9 +7,6 @@ public class TimetableSkeleton {
     public WeekSkeleton evenWeek, oddWeek;
 
     private HttpServletRequest req;
-    private int limits[] = new int[GlobalNamespace.days.length];
-
-    private String res;
 
     public TimetableSkeleton(HttpServletRequest req) {
         this.req = req;
@@ -17,9 +14,25 @@ public class TimetableSkeleton {
     }
 
     public String toXML() {
-        res = "";
-        //setHeader();
+        String res = "";
+
+        res += openTag();
+        res += evenWeek.toXML();
+        res += oddWeek.toXML();
+        res += closeTag();
+
         return res;
+    }
+
+    private String openTag() {
+        return "<timetable group=\"" + groupNumber + "\" subgroup=\"" + subgroupNumber + "\" first_day=\"" +
+                GlobalNamespace.nDigit(firstDayDay, 2) + "." +
+                GlobalNamespace.nDigit(firstDayMonth, 2) + "." +
+                firstDayYear + "\">";
+    }
+
+    private String closeTag() {
+        return "</timetable>";
     }
 
     private void build() {
@@ -28,6 +41,7 @@ public class TimetableSkeleton {
     }
 
     private void setMainIds() {
+//        System.out.println("=========     " + req.getParameter("group_number"));
         groupNumber    = GlobalNamespace.fromParamToInt(req.getParameter("group_number"), 0);
         subgroupNumber = GlobalNamespace.fromParamToInt(req.getParameter("subgroup_number"), 0);
         firstDayDay    = GlobalNamespace.fromParamToInt(req.getParameter("first_day_day"), 1);

@@ -19,6 +19,26 @@ public class WeekSkeleton {
         build();
     }
 
+    public String toXML() {
+        String res = "";
+
+        res += openTag();
+        for (DaySkeleton day : daySkeleton) {
+            res += day.toXML();
+        }
+        res += closeTag();
+
+        return res;
+    }
+
+    private String openTag() {
+        return "<week parity=\"" + parity + "\">";
+    }
+
+    private String closeTag() {
+        return "</week>";
+    }
+
     private void build() {
         setLimits();
         for (int i = 0; i < GlobalNamespace.days.length; i++) {
@@ -42,8 +62,9 @@ public class WeekSkeleton {
 
     private void setDay(int day) {
         daySkeleton[day] = new DaySkeleton(
-                parityPrefix + GlobalNamespace.days[day],
-                day == 0 ? 0 : limits[day - 1],
+                parityPrefix,
+                day,
+                day == 0 ? -1 : limits[day - 1] - 1,
                 limits[day],
                 req
         );

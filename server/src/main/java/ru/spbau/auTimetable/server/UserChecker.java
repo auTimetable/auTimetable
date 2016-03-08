@@ -7,7 +7,7 @@ import java.util.List;
 
 public class UserChecker {
     private static List<String> adminUsers =
-            Arrays.asList("equivalence1", "rozplokhas");
+            Arrays.asList("equivalence1", "rozplokhas", "anton.m.kuznetsov");
 
     public static boolean isAdminUser(User user) {
         return (user != null && adminUsers.contains(user.getNickname()));

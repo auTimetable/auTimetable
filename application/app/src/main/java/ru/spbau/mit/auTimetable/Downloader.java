@@ -94,7 +94,7 @@ public class Downloader {
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
 
         String content = s.hasNext() ? s.next() : "";
-        if (content.equals("There is no timetable for this group and subgroup")) {
+        if (content.equals("Not found.")) {
             result.setError(content);
         } else {
             result.setContent(content);
