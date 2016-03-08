@@ -39,8 +39,8 @@ public class ClassSkeleton {
     private String mainInfo() {
         String subjectString   = "<subject>" + subject + "</subject>";
         String typeString      = "<type>" + type + "</type>";
-        String classroomString = "<classroom>" + subject + "</classroom>";
-        String teacherString   = "<teacher>" + subject + "</teacher>";
+        String classroomString = "<classroom>" + classroom + "</classroom>";
+        String teacherString   = "<teacher>" + teacher + "</teacher>";
 
         return subjectString + typeString + classroomString + teacherString;
     }
