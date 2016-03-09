@@ -1,5 +1,7 @@
 package ru.spbau.auTimetable.server;
 
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.tools.cloudstorage.GcsService;
 import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.appengine.tools.cloudstorage.RetryParams;
@@ -9,6 +11,8 @@ public class GlobalNamespace {
 
     public static final GcsService gcsService =
             GcsServiceFactory.createGcsService(RetryParams.getDefaultInstance());
+
+    public static final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
     public static String days[] = new String[]{
             "Понедельник",

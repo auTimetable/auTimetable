@@ -5,15 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.googlecode.objectify.ObjectifyService;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 public class TimetableServlet extends HttpServlet {
-    private BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -33,7 +30,7 @@ public class TimetableServlet extends HttpServlet {
             res.getWriter().print("Not found.");
         } else {
             BlobKey blobKey = new BlobKey(files.get(0).gsFileName);
-            blobstoreService.serve(blobKey, res);
+            GlobalNamespace.blobstoreService.serve(blobKey, res);
             res.setContentType("text/xml");
         }
     }

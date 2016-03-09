@@ -58,16 +58,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>files_list</servlet-name>
-        <servlet-class>ru.spbau.auTimetable.server.FilesListServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>files_list</servlet-name>
-        <url-pattern>/files_list</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>scores_list</servlet-name>
         <servlet-class>ru.spbau.auTimetable.server.ScoresListServlet</servlet-class>
     </servlet>

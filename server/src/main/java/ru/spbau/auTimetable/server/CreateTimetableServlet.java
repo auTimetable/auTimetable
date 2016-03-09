@@ -13,13 +13,10 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.tools.cloudstorage.*;
 import com.googlecode.objectify.ObjectifyService;
 
 public class CreateTimetableServlet extends HttpServlet {
-    private final BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
     private TimetableSkeleton timetableSkeleton;
 
     @Override
@@ -54,7 +51,7 @@ public class CreateTimetableServlet extends HttpServlet {
         outputChannel.write(ByteBuffer.wrap(timetable.getBytes()));
         outputChannel.close();
 
-        return blobstoreService.createGsBlobKey(
+        return GlobalNamespace.blobstoreService.createGsBlobKey(
                 "/gs/" + gcsFileName.getBucketName() + "/" + gcsFileName.getObjectName());
     }
 

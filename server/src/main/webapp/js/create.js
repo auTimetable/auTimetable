@@ -72,7 +72,6 @@ function addClass(parity, dayName) {
     button.onclick = function() {
             removeClass("class_form" + currentValue);
             changeCounter(parity + "_" + dayName, -1);
-//            document.getElementById(parity + "_" + dayName + "_counter").value -= 1;
     };
 }
 

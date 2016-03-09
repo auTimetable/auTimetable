@@ -10,7 +10,7 @@ import java.util.Date;
 public class UploadedFile {
     @Id public Long id;
 
-    @Index String key;
+    @Index public String key;
     public String groupNumber;
     public String subgroupNumber;
     public String gsFileName;

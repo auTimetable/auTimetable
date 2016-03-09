@@ -49,6 +49,12 @@
             </div>
         </div>
 
+        <div class="container-fluid">
+            <div class="row">
+                <a href="../files.jsp">Просмотр всех файлов</a>
+            </div>
+        </div>
+
         <%
         if (user != null) {
         %>
