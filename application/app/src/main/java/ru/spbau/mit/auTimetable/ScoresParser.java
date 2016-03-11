@@ -25,16 +25,7 @@ public class ScoresParser {
         }
 
         try {
-            Scanner in = new Scanner(file);
-            int n = in.nextInt();
-            in.nextLine();
-
-            for (int i = 0; i < n; i++) {
-                String subject = in.nextLine();
-                String link = in.nextLine();
-
-                result.add(new ScoresLink(subject, link));
-            }
+            makeResult(result);
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -43,16 +34,28 @@ public class ScoresParser {
         return result;
     }
 
+    private void makeResult(ArrayList<ScoresLink> result) throws FileNotFoundException {
+        Scanner in = new Scanner(file);
+        int n = in.nextInt();
+        in.nextLine();
+
+        for (int i = 0; i < n; i++) {
+            String subject = in.nextLine();
+            String link = in.nextLine();
+
+            result.add(new ScoresLink(subject, link));
+        }
+    }
+
     public static class Builder {
         public static ScoresParser build(Activity activity, int group, int subgroup) {
-            String fileName = Integer.toString(group) + "_" +
-                    Integer.toString(subgroup) + ".scores.xml";
+            String fileName = ScoresStringProvider.provideFilePath(group, subgroup);
             File file = new File(activity.getCacheDir(), fileName);
 
             if (file.exists()) {
                 return new ScoresParser(file);
             } else {
-                Downloader downloader = new Downloader("get_scores", group, subgroup, activity);
+                Downloader downloader = new Downloader("scores", group, subgroup, activity);
                 Downloader.ResultContainer scoresList = downloader.download();
 
                 if (!scoresList.isError) {

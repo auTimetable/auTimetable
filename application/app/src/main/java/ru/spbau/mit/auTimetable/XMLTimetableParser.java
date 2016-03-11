@@ -4,9 +4,11 @@ package ru.spbau.mit.auTimetable;
 import android.app.Activity;
 import android.widget.Toast;
 import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.Hashtable;
 import java.util.Map;
@@ -26,59 +28,74 @@ public class XMLTimetableParser {
         this.subgroup = subgroup;
 
         try {
-            FileInputStream fis = new FileInputStream(file);
-            DocumentBuilderFactory dbFactory
-                    = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            doc = dBuilder.parse(fis);
-            doc.getDocumentElement().normalize();
+            initializeDoc(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public WeekInfo getWeek(Date currentDay) {
-        if (doc == null) {
-            return new WeekInfo(group, subgroup, 0);
-        }
-
         try {
-            Node table = doc.getElementsByTagName("timetable").item(0);
-            String stringFirstDay = ((Element)table).getAttribute("first_day");
+            int parity = getParity(currentDay);
 
-            int parity = 0;
-            try {
-                String dayParts[] = stringFirstDay.split("\\.");
-
-                int firstDayDay = Integer.parseInt(dayParts[0]);
-                int firstDayMonth = Integer.parseInt(dayParts[1]);
-                int firstDayYear = Integer.parseInt(dayParts[2]);
-
-                Date firstDay = new Date(firstDayYear, firstDayMonth - 1, firstDayDay);
-
-                if (currentDay.compare(firstDay) < 0) {
-                    return new WeekInfo(group, subgroup, 0);
-                }
-
-                parity = firstDay.howManyWeeksPassed(currentDay) % 2;
-            } catch (Exception e) {
-                //parity is set to 0 if no first day specified
-            }
-
-            NodeList weeks = doc.getElementsByTagName("week");
-
-            for (int i = 0; i < weeks.getLength(); i++) {
-                Node curWeek = weeks.item(i);
-                Element weekElement = (Element) curWeek;
-                if (weekElement.getAttribute("parity").equals(Integer.toString(parity))) {
-                    return parseWeek(weekElement, parity);
-                }
+            if (parity == -1) {
+                return new WeekInfo(group, subgroup, 0);
+            } else {
+                return getWeekWithParity(parity);
             }
         } catch (Exception e) {
             return new WeekInfo(group, subgroup, 0);
         }
+    }
+
+    private int getParity(Date currentDay) {
+        try {
+            Date firstDay = makeFirstDay();
+            if (currentDay.compare(firstDay) < 0) {
+                return -1;
+            }
+            return firstDay.howManyWeeksPassed(currentDay) % 2;
+        } catch (Exception e) {
+            //parity is set to 0 if no first day specified
+        }
+        return 0;
+    }
+
+    private Date makeFirstDay() {
+        Node table = doc.getElementsByTagName("timetable").item(0);
+        String stringFirstDay = ((Element)table).getAttribute("first_day");
+
+        String dayParts[] = stringFirstDay.split("\\.");
+
+        int firstDayDay = Integer.parseInt(dayParts[0]);
+        int firstDayMonth = Integer.parseInt(dayParts[1]);
+        int firstDayYear = Integer.parseInt(dayParts[2]);
+
+        return new Date(firstDayYear, firstDayMonth - 1, firstDayDay);
+    }
+
+    private WeekInfo getWeekWithParity(int parity) {
+        NodeList weeks = doc.getElementsByTagName("week");
+
+        for (int i = 0; i < weeks.getLength(); i++) {
+            Node curWeek = weeks.item(i);
+            Element weekElement = (Element) curWeek;
+            if (weekElement.getAttribute("parity").equals(Integer.toString(parity))) {
+                return parseWeek(weekElement, parity);
+            }
+        }
 
         return new WeekInfo(group, subgroup, 0);
+    }
+
+    private void initializeDoc(File file) throws IOException,
+            ParserConfigurationException, SAXException {
+        FileInputStream fis = new FileInputStream(file);
+        DocumentBuilderFactory dbFactory
+                = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        doc = dBuilder.parse(fis);
+        doc.getDocumentElement().normalize();
     }
 
     private WeekInfo parseWeek(Element week, int parity) {
@@ -111,11 +128,7 @@ public class XMLTimetableParser {
 
     private ClassInfo parseClass(Element lesson) {
         NodeList infoFields = lesson.getElementsByTagName("*");
-
-        String start = lesson.getAttribute("start");
-        String end   = lesson.getAttribute("end");
-        TimeInterval ti = parseTimeInterval(start, end);
-
+        TimeInterval ti = makeTimeInterval(lesson);
         Map<String, String> infoFieldsValues = new Hashtable<>();
 
         for (int i = 0; i < infoFields.getLength(); i++) {
@@ -123,6 +136,16 @@ public class XMLTimetableParser {
             infoFieldsValues.put(curField.getNodeName(), curField.getTextContent());
         }
 
+        return makeClassInfo(infoFieldsValues, ti);
+    }
+
+    private TimeInterval makeTimeInterval(Element lesson) {
+        String start = lesson.getAttribute("start");
+        String end   = lesson.getAttribute("end");
+        return parseTimeInterval(start, end);
+    }
+
+    private ClassInfo makeClassInfo(Map<String, String> infoFieldsValues, TimeInterval ti) {
         String subject   = infoFieldsValues.get("subject");
         String type      = infoFieldsValues.get("type");
         String classroom = infoFieldsValues.get("classroom");
@@ -151,36 +174,55 @@ public class XMLTimetableParser {
 
     public static class Builder {
         public static XMLTimetableParser build(Activity activity, int group, int subgroup) {
-            String fileName = Integer.toString(group) + "_" +
-                    Integer.toString(subgroup) + ".timetable.xml";
-            File file = new File(activity.getCacheDir(), fileName);
+            File file = getFile(activity, group, subgroup);
+            return handleFile(file, activity, group, subgroup);
+        }
 
+        private static File getFile(Activity activity, int group, int subgroup) {
+            String fileName = TimetableStringProvider.provideFilePath(group, subgroup);
+            return new File(activity.getCacheDir(), fileName);
+        }
+
+        private static XMLTimetableParser handleFile(File file, Activity activity,
+                                                     int group, int subgroup) {
             if (file.exists()) {
                 return new XMLTimetableParser(file, group, subgroup);
             } else {
-                Downloader downloader = new Downloader("timetable", group, subgroup, activity);
-                Downloader.ResultContainer timetable = downloader.download();
-
-                if (!timetable.isError) {
-                    try {
-                        FileOutputStream fos = new FileOutputStream(file);
-                        try {
-                            fos.write(timetable.content.getBytes());
-                        } finally {
-                            fos.close();
-                        }
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                        showError("Could not create file in cache.", activity);
-
-                        return new XMLTimetableParser();
-                    }
-                    return new XMLTimetableParser(file, group, subgroup);
-                } else {
-                    showError(timetable.error, activity);
-                    return new XMLTimetableParser();
-                }
+                return downloadAndWrite(file, activity, group, subgroup);
             }
+        }
+
+        private static XMLTimetableParser downloadAndWrite(File file, Activity activity,
+                                                            int group, int subgroup) {
+            Downloader downloader = new Downloader("timetable", group, subgroup, activity);
+            Downloader.ResultContainer timetable = downloader.download();
+
+            if (!timetable.isError) {
+                return writeToFile(file, activity, group, subgroup, timetable);
+            } else {
+                showError(timetable.error, activity);
+                return new XMLTimetableParser();
+            }
+        }
+
+        private static XMLTimetableParser writeToFile(File file, Activity activity,
+                                                      int group, int subgroup,
+                                                      Downloader.ResultContainer timetable) {
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                try { // API >= 19 required for try-with-resources
+                    fos.write(timetable.content.getBytes());
+                } finally {
+                    fos.close();
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+                showError("Could not create file in cache.", activity);
+
+                return new XMLTimetableParser();
+            }
+
+            return new XMLTimetableParser(file, group, subgroup);
         }
     }
 

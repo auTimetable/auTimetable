@@ -34,17 +34,16 @@ public class Downloader {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            downloadUrl(createUrl(), result);
+            if (prefix.equals("timetable")) {
+                downloadUrl(TimetableStringProvider.provideUrl(group, subgroup), result);
+            } else {
+                downloadUrl(ScoresStringProvider.provideUrl(group, subgroup), result);
+            }
 
             return result;
         } else {
             return new ResultContainer("", "No network connection.", true);
         }
-    }
-
-    private String createUrl() {
-        return "https://autimetable-1151.appspot.com/" + prefix + "?group_number=" + group +
-                "&subgroup_number=" + subgroup;
     }
 
     private void downloadUrl(String myUrl, ResultContainer result) {

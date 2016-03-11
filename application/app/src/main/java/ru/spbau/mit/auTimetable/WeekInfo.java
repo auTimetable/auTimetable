@@ -1,6 +1,8 @@
 package ru.spbau.mit.auTimetable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by equi on 30.11.15.
@@ -12,8 +14,8 @@ public class WeekInfo {
     public int subgroup;
     public int parity;
 
-    private ArrayList<DayInfo> dayList;
-    private ArrayList<String> dayNames;
+    private List<DayInfo> dayList;
+    private List<String> dayNames;
 
     public WeekInfo(int group, int subgroup, int parity) {
         this.group = group;
@@ -33,14 +35,15 @@ public class WeekInfo {
     }
 
     private void setUpDaysNames() {
-        dayNames = new ArrayList<>();
-        dayNames.add("sunday");
-        dayNames.add("monday");
-        dayNames.add("tuesday");
-        dayNames.add("wednesday");
-        dayNames.add("thursday");
-        dayNames.add("friday");
-        dayNames.add("saturday");
+        dayNames = Arrays.asList(
+                "sunday",
+                "monday",
+                "tuesday",
+                "wednesday",
+                "thursday",
+                "friday",
+                "saturday"
+        );
     }
 
     private void setUpDayList() {
