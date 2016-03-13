@@ -11,20 +11,20 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Downloader {
-    private int group;
-    private int subgroup;
+    private GlobalGroupId globalGroupId;
     private Activity activity;
     private ResultContainer result;
-    private String prefix;
     private InputStream is;
+    private StringProvider stringProvider;
 
     private static final int TIME_TO_DOWNLOAD_MS = 5000000; //5 seconds
 
-    public Downloader(String prefix, int group, int subgroup, Activity activity) {
-        this.prefix = prefix;
-        this.group = group;
-        this.subgroup = subgroup;
+    public Downloader(GlobalGroupId globalGroupId, Activity activity,
+                      StringProvider stringProvider) {
+        this.globalGroupId = globalGroupId;
         this.activity = activity;
+        this.stringProvider = stringProvider;
+
         result = new ResultContainer();
     }
 
@@ -34,11 +34,7 @@ public class Downloader {
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            if (prefix.equals("timetable")) {
-                downloadUrl(TimetableStringProvider.provideUrl(group, subgroup), result);
-            } else {
-                downloadUrl(ScoresStringProvider.provideUrl(group, subgroup), result);
-            }
+            downloadUrl(stringProvider.provideUrl(globalGroupId), result);
 
             return result;
         } else {

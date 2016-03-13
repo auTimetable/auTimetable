@@ -10,16 +10,14 @@ import java.util.List;
  * @author Kravchenko Dima
  */
 public class WeekInfo {
-    public int group;
-    public int subgroup;
+    public GlobalGroupId globalGroupId;
     public int parity;
 
     private List<DayInfo> dayList;
     private List<String> dayNames;
 
-    public WeekInfo(int group, int subgroup, int parity) {
-        this.group = group;
-        this.subgroup = subgroup;
+    public WeekInfo(GlobalGroupId globalGroupId, int parity) {
+        this.globalGroupId = globalGroupId;
         this.parity = parity;
 
         setUpDaysNames();

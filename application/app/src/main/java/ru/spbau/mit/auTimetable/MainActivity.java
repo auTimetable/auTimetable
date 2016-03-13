@@ -19,8 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    private static int groupNumber = 0;
-    private static int subgroupNumber = 0;
+    private static GlobalGroupId globalGroupId = new GlobalGroupId(0, 0);
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
@@ -60,8 +59,8 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 0 && resultCode == RESULT_OK) {
-            groupNumber = data.getIntExtra("group_number", 0);
-            subgroupNumber = data.getIntExtra("subgroup_number", 0);
+            globalGroupId.group = data.getIntExtra("group_number", 0);
+            globalGroupId.subgroup = data.getIntExtra("subgroup_number", 0);
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, PlaceholderFragment.newInstance(currentSection))
@@ -130,16 +129,16 @@ public class MainActivity extends AppCompatActivity
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        savedInstanceState.putInt("group_number", groupNumber);
-        savedInstanceState.putInt("subgroup_number", subgroupNumber);
+        savedInstanceState.putInt("group_number", globalGroupId.group);
+        savedInstanceState.putInt("subgroup_number", globalGroupId.subgroup);
     }
 
     @Override
     public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        groupNumber = savedInstanceState.getInt("group_number");
-        subgroupNumber = savedInstanceState.getInt("subgroup_number");
+        globalGroupId.group = savedInstanceState.getInt("group_number");
+        globalGroupId.subgroup = savedInstanceState.getInt("subgroup_number");
     }
 
         @Override
@@ -150,8 +149,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, SettingsActivity.class);
             Bundle extras = new Bundle();
 
-            extras.putInt("group_number", groupNumber);
-            extras.putInt("subgroup_number", subgroupNumber);
+            extras.putInt("group_number", globalGroupId.group);
+            extras.putInt("subgroup_number", globalGroupId.subgroup);
 
             intent.putExtras(extras);
             startActivityForResult(intent, 0);
@@ -214,8 +213,8 @@ public class MainActivity extends AppCompatActivity
 
         private static void prepareArgs(Bundle args, int sectionNumber) {
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            args.putInt("group_number", groupNumber);
-            args.putInt("subgroup_number", subgroupNumber);
+            args.putInt("group_number", globalGroupId.group);
+            args.putInt("subgroup_number", globalGroupId.subgroup);
         }
     }
 

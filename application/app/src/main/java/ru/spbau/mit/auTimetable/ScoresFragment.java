@@ -22,8 +22,7 @@ public class ScoresFragment extends Fragment {
 
     private Activity activity;
 
-    private int groupNumber;
-    private int subgroupNumber;
+    private GlobalGroupId globalGroupId = new GlobalGroupId(0, 0);
 
     ProgressDialog progressDialog;
 
@@ -34,8 +33,8 @@ public class ScoresFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     public ScoresFragment() {
-        groupNumber = 0;
-        subgroupNumber = 0;
+        globalGroupId.group = 0;
+        globalGroupId.subgroup = 0;
     }
 
     @Override
@@ -50,8 +49,8 @@ public class ScoresFragment extends Fragment {
         setUp(inflater, container);
 
         Bundle args = getArguments();
-        groupNumber = args.getInt("group_number", 0);
-        subgroupNumber = args.getInt("subgroup_number", 0);
+        globalGroupId.group = args.getInt("group_number", 0);
+        globalGroupId.subgroup = args.getInt("subgroup_number", 0);
 
         activity = getActivity();
         progressDialog = ProgressDialog.show(getActivity(), "Loading",
@@ -106,7 +105,10 @@ public class ScoresFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... params) {
-            parser = ScoresParser.Builder.build(activity, groupNumber, subgroupNumber);
+            StringProvider stringProvider = new ScoresStringProvider();
+            FileProvider fileProvider = new FileProvider(activity, stringProvider, globalGroupId);
+
+            parser = new ScoresParser(fileProvider.provideContent());
             return null;
         }
 

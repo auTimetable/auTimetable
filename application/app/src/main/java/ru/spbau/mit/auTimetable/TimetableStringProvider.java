@@ -1,12 +1,19 @@
 package ru.spbau.mit.auTimetable;
 
-public class TimetableStringProvider {
-    public static String provideUrl(int group, int subgroup) {
-        return "https://autimetable-1151.appspot.com/timetable" + "?group_number=" + group +
-                "&subgroup_number=" + subgroup;
+public class TimetableStringProvider implements StringProvider {
+    @Override
+    public String provideUrl(GlobalGroupId globalGroupId) {
+        return "https://autimetable-1151.appspot.com/timetable" + "?group_number=" +
+                globalGroupId.group +
+                "&subgroup_number=" +
+                globalGroupId.subgroup;
     }
 
-    public static String provideFilePath(int group, int subgroup) {
-        return Integer.toString(group) + "_" + Integer.toString(subgroup) + ".timetable.xml";
+    @Override
+    public String provideFilePath(GlobalGroupId globalGroupId) {
+        return Integer.toString(globalGroupId.group) +
+                "_" +
+                Integer.toString(globalGroupId.subgroup) +
+                ".timetable.xml";
     }
 }

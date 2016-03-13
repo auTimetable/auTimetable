@@ -5,13 +5,21 @@ package ru.spbau.mit.auTimetable;
  *
  * @author Kravchenko Dima
  */
-public class ScoresStringProvider {
-    public static String provideUrl(int group, int subgroup) {
-        return "https://autimetable-1151.appspot.com/get_scores" + "?group_number=" + group +
-                "&subgroup_number=" + subgroup;
+public class ScoresStringProvider implements StringProvider {
+    @Override
+    public String provideUrl(GlobalGroupId globalGroupId) {
+        return "https://autimetable-1151.appspot.com/get_scores" +
+                "?group_number=" +
+                globalGroupId.group +
+                "&subgroup_number=" +
+                globalGroupId.subgroup;
     }
 
-    public static String provideFilePath(int group, int subgroup){
-        return Integer.toString(group) + "_" + Integer.toString(subgroup) + ".scores.xml";
+    @Override
+    public String provideFilePath(GlobalGroupId globalGroupId){
+        return Integer.toString(globalGroupId.group) +
+                "_" +
+                Integer.toString(globalGroupId.subgroup) +
+                ".scores.xml";
     }
 }

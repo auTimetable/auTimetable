@@ -1,8 +1,5 @@
 package ru.spbau.mit.auTimetable;
 
-
-import android.app.Activity;
-import android.widget.Toast;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -15,22 +12,18 @@ import java.util.Map;
 
 
 public class XMLTimetableParser {
-    private Document doc = null;
+    private Document doc;
 
-    private int group;
-    private int subgroup;
+    private GlobalGroupId globalGroupId;
 
-    private XMLTimetableParser() {
-    }
-
-    private XMLTimetableParser(File file, int group, int subgroup) {
-        this.group = group;
-        this.subgroup = subgroup;
+    public XMLTimetableParser(File file, GlobalGroupId globalGroupId) {
+        this.globalGroupId = globalGroupId;
 
         try {
             initializeDoc(file);
         } catch (Exception e) {
             e.printStackTrace();
+            // File was not created for some reason
         }
     }
 
@@ -39,12 +32,12 @@ public class XMLTimetableParser {
             int parity = getParity(currentDay);
 
             if (parity == -1) {
-                return new WeekInfo(group, subgroup, 0);
+                return new WeekInfo(globalGroupId, 0);
             } else {
                 return getWeekWithParity(parity);
             }
         } catch (Exception e) {
-            return new WeekInfo(group, subgroup, 0);
+            return new WeekInfo(globalGroupId, 0);
         }
     }
 
@@ -85,7 +78,7 @@ public class XMLTimetableParser {
             }
         }
 
-        return new WeekInfo(group, subgroup, 0);
+        return new WeekInfo(globalGroupId, 0);
     }
 
     private void initializeDoc(File file) throws IOException,
@@ -99,7 +92,7 @@ public class XMLTimetableParser {
     }
 
     private WeekInfo parseWeek(Element week, int parity) {
-        WeekInfo weekInfo = new WeekInfo(group, subgroup, parity);
+        WeekInfo weekInfo = new WeekInfo(globalGroupId, parity);
         NodeList days = week.getElementsByTagName("day");
 
         for (int i = 0; i < days.getLength(); i++) {
@@ -170,67 +163,5 @@ public class XMLTimetableParser {
         int endM   = Integer.parseInt(endTimeParts[1]);
 
         return new TimeInterval(startH, startM, endH, endM);
-    }
-
-    public static class Builder {
-        public static XMLTimetableParser build(Activity activity, int group, int subgroup) {
-            File file = getFile(activity, group, subgroup);
-            return handleFile(file, activity, group, subgroup);
-        }
-
-        private static File getFile(Activity activity, int group, int subgroup) {
-            String fileName = TimetableStringProvider.provideFilePath(group, subgroup);
-            return new File(activity.getCacheDir(), fileName);
-        }
-
-        private static XMLTimetableParser handleFile(File file, Activity activity,
-                                                     int group, int subgroup) {
-            if (file.exists()) {
-                return new XMLTimetableParser(file, group, subgroup);
-            } else {
-                return downloadAndWrite(file, activity, group, subgroup);
-            }
-        }
-
-        private static XMLTimetableParser downloadAndWrite(File file, Activity activity,
-                                                            int group, int subgroup) {
-            Downloader downloader = new Downloader("timetable", group, subgroup, activity);
-            Downloader.ResultContainer timetable = downloader.download();
-
-            if (!timetable.isError) {
-                return writeToFile(file, activity, group, subgroup, timetable);
-            } else {
-                showError(timetable.error, activity);
-                return new XMLTimetableParser();
-            }
-        }
-
-        private static XMLTimetableParser writeToFile(File file, Activity activity,
-                                                      int group, int subgroup,
-                                                      Downloader.ResultContainer timetable) {
-            try {
-                FileOutputStream fos = new FileOutputStream(file);
-                try { // API >= 19 required for try-with-resources
-                    fos.write(timetable.content.getBytes());
-                } finally {
-                    fos.close();
-                }
-            } catch(Exception e) {
-                e.printStackTrace();
-                showError("Could not create file in cache.", activity);
-
-                return new XMLTimetableParser();
-            }
-
-            return new XMLTimetableParser(file, group, subgroup);
-        }
-    }
-
-    private static void showError(final String error, final Activity activity) {
-        activity.runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(activity, error, Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

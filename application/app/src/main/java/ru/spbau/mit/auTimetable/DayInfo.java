@@ -13,7 +13,7 @@ public class DayInfo {
 
     public DayInfo(String dayName) {
         this.dayName = dayName;
-        classList = new ArrayList<ClassInfo>();
+        classList = new ArrayList<>();
     }
 
     public void add(ClassInfo classInfo) {

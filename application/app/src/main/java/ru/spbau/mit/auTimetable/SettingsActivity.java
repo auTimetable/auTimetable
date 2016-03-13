@@ -14,8 +14,7 @@ import android.widget.EditText;
  */
 @SuppressWarnings("deprecation")
 public class SettingsActivity extends ActionBarActivity {
-    private int groupNumber;
-    private int subgroupNumber;
+    private GlobalGroupId globalGroupId = new GlobalGroupId(0, 0);
 
     private EditText groupNumberEditText;
     private EditText subgroupNumberEditText;
@@ -31,14 +30,14 @@ public class SettingsActivity extends ActionBarActivity {
     }
 
     private void setTextNumbers() {
-        groupNumber = getIntent().getIntExtra("group_number", 0);
-        subgroupNumber = getIntent().getIntExtra("subgroup_number", 0);
+        globalGroupId.group = getIntent().getIntExtra("group_number", 0);
+        globalGroupId.subgroup = getIntent().getIntExtra("subgroup_number", 0);
 
         groupNumberEditText = (EditText) findViewById(R.id.group_number);
         subgroupNumberEditText = (EditText) findViewById(R.id.subgroup_number);
 
-        groupNumberEditText.setText(Integer.toString(groupNumber));
-        subgroupNumberEditText.setText(Integer.toString(subgroupNumber));
+        groupNumberEditText.setText(Integer.toString(globalGroupId.group));
+        subgroupNumberEditText.setText(Integer.toString(globalGroupId.subgroup));
     }
 
     private void setUpDoneButton() {
@@ -57,8 +56,8 @@ public class SettingsActivity extends ActionBarActivity {
 
         getGroupAndSubgroupNumbers();
 
-        returnIntent.putExtra("group_number", groupNumber);
-        returnIntent.putExtra("subgroup_number", subgroupNumber);
+        returnIntent.putExtra("group_number", globalGroupId.group);
+        returnIntent.putExtra("subgroup_number", globalGroupId.subgroup);
 
         setResult(RESULT_OK, returnIntent);
         finish();
@@ -66,11 +65,11 @@ public class SettingsActivity extends ActionBarActivity {
 
     private void getGroupAndSubgroupNumbers() {
         try {
-            groupNumber = Integer.parseInt(groupNumberEditText.getText().toString());
-            subgroupNumber = Integer.parseInt(subgroupNumberEditText.getText().toString());
+            globalGroupId.group = Integer.parseInt(groupNumberEditText.getText().toString());
+            globalGroupId.subgroup = Integer.parseInt(subgroupNumberEditText.getText().toString());
         } catch (Exception e) {
-            groupNumber = 0;
-            subgroupNumber = 0;
+            globalGroupId.group = 0;
+            globalGroupId.subgroup = 0;
         }
     }
 }
