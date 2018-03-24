@@ -1,2 +1,3 @@
-#auTimetable
-Приложение для просмотра расписания занятий в Санкт-Петербургском Академическом Университете
+# auTimetable
+
+Android application to manage and view student's timetable of classes in Academic University
